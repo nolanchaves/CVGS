@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "Preferences";
+}
+
+<h2>Preferences</h2>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <strong>There were some errors with your preference submission:</strong>
+        <ul>
+            @foreach (var entry in ViewData.ModelState)
+            {
+                foreach (var error in entry.Value.Errors)
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            }
+        </ul>
+    </div>
+}
+
+@if (Model != null)
+{
+    <form asp-action="Preferences" method="post">
+        <div class="mb-3">
+            <label>Favourite Platforms</label>
+            @foreach (var platform in Model.AvailablePlatforms)
+            {
+                <div>
+                    <input type="checkbox" name="FavouritePlatforms" value="@platform"
+                    @(Model.FavouritePlatforms.Contains(platform) ? "checked" : "") />
+                    <label>@platform</label>
+                </div>
+            }
+        </div>
+
+        <div class="mb-3">
+            <label>Favourite Game Categories</label>
+            @foreach (var category in Model.AvailableGameCategories)
+            {
+                <div>
+                    <input type="checkbox" name="FavouriteGameCategories" value="@category"
+                    @(Model.FavouriteGameCategories.Contains(category) ? "checked" : "") />
+                    <label>@category</label>
+                </div>
+            }
+        </div>
+
+        <div class="mb-3">
+            <label>Language Preferences</label>
+            @foreach (var language in Model.AvailableLanguages)
+            {
+                <div>
+                    <input type="checkbox" name="LanguagePreferences" value="@language"
+                    @(Model.LanguagePreferences.Contains(language) ? "checked" : "") />
+                    <label>@language</label>
+                </div>
+            }
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Preferences</button>
+    </form>
+}
+else
+{
+    <p>Model is null.</p>
+}

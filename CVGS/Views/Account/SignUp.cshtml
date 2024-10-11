@@ -1,0 +1,59 @@
+﻿@model CVGS.Models.SignUpViewModel
+
+@{
+    ViewData["Title"] = "Sign Up";
+}
+
+<div class="container">
+    <h2>Sign Up</h2>
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            <strong>There were some errors with your sign up:</strong>
+            <ul>
+                @foreach (var entry in ViewData.ModelState)
+                {
+                    foreach (var error in entry.Value.Errors)
+                    {
+                        <li>@error.ErrorMessage</li>
+                    }
+                }
+            </ul>
+        </div>
+    }
+
+    <form asp-action="SignUp" method="post">
+        <div class="form-group">
+            <label asp-for="DisplayName"></label>
+            <input asp-for="DisplayName" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Password"></label>
+            <input asp-for="Password" class="form-control" type="password" />
+        </div>
+        <div class="form-group">
+            <label asp-for="ConfirmPassword"></label>
+            <input asp-for="ConfirmPassword" class="form-control" type="password" />
+        </div>
+
+        <br />
+
+        <div class="g-recaptcha" data-sitekey="6LeotlsqAAAAADOV94OuX4lOkuTj2PD0cfx7F-80"></div>
+
+
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+            <a asp-controller="Account" asp-action="Login" class="btn btn-success">Login</a>
+        </div>
+    </form>
+
+    @section Scripts {
+        <script src='https://www.google.com/recaptcha/api.js'></script>
+    }
+</div>
+
