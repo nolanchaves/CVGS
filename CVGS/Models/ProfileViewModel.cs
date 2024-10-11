@@ -21,8 +21,8 @@ namespace CVGS.Models
 
         public AddressViewModel? Address { get; set; }
 
-        public List<string> FavoritePlatforms { get; set; } = new List<string>();
-        public List<string> FavoriteGameCategories { get; set; } = new List<string>();
+        public List<string> FavouritePlatforms { get; set; } = new List<string>();
+        public List<string> FavouriteGameCategories { get; set; } = new List<string>();
         public List<string> LanguagePreferences { get; set; } = new List<string>();
     }
 }

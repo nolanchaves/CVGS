@@ -5,25 +5,25 @@
 namespace CVGS.Migrations
 {
     /// <inheritdoc />
-    public partial class RoleFullName : Migration
+    public partial class dbPreferenceUpdate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "FullName",
-                table: "AspNetUsers",
+                name: "AvailablePlatforms",
+                table: "Preferences",
                 type: "nvarchar(max)",
                 nullable: false,
-                defaultValue: "");
+                defaultValue: "[]");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "FullName",
-                table: "AspNetUsers");
+                name: "AvailablePlatforms",
+                table: "Preferences");
         }
     }
 }

@@ -10,24 +10,18 @@
     </div>
 }
 
-@if (Model != null)
-{
-    <h1>Welcome, @Model.ActualName to your Dashboard</h1>
-}
-else
-{
-    <h1>Welcome to your Dashboard</h1>
-}
-
+<h1>Welcome to your Dashboard</h1>
 <div class="container mt-5">
     <div class="card">
-        <div class="card-body">
+        <div class="card-header">
             <h2>Profile</h2>
+        </div>
+        <div class="card-body">
             <div>
                 <ul style="list-style-type: none;">
                     <li><strong>Actual Name:</strong> @(Model != null ? Model.ActualName : "N/A")</li>
                     <li><strong>Gender:</strong> @(Model != null ? Model.Gender : "N/A")</li>
-                    <strong>Birthday:</strong> @(Model != null ? (Model.BirthDate != DateOnly.MinValue ? Model.BirthDate.ToString("d") : "N/A") : "N/A")
+                    <li><strong>Birthday:</strong> @(Model != null ? (Model.BirthDate != DateOnly.MinValue ? Model.BirthDate.ToString("d") : "N/A") : "N/A")</li>
                     <li><strong>Receive Promotional Emails:</strong> @(Model != null ? (Model.ReceivePromotionalEmails ? "Yes" : "No") : "N/A")</li>
                 </ul>
                 <a asp-controller="Account" asp-action="Profile" class="btn btn-primary">Update Profile</a>
@@ -36,15 +30,16 @@ else
     </div>
 
     <div class="card mt-4">
-        <div class="card-body">
+        <div class="card-header">
             <h2>Preferences</h2>
+        </div>
+        <div class="card-body">
             <div>
                 <ul style="list-style-type: none;">
                     <li>
                         <strong>Favourite Platforms:</strong> @(Model.Preferences != null && Model.Preferences.FavouritePlatforms != null && Model.Preferences.FavouritePlatforms.Any()
                         ? string.Join(", ", Model.Preferences.FavouritePlatforms)
                         : "N/A")
-
                     </li>
                     <li>
                         <strong>Favourite Game Categories:</strong> @(Model.Preferences != null && Model.Preferences.FavouriteGameCategories != null && Model.Preferences.FavouriteGameCategories.Any()
@@ -56,47 +51,31 @@ else
                         ? string.Join(", ", Model.Preferences.LanguagePreferences)
                         : "N/A")
                     </li>
-
-
                 </ul>
                 <a asp-controller="Account" asp-action="Preferences" class="btn btn-primary">Update Preferences</a>
             </div>
         </div>
     </div>
+
     <div class="card mt-4">
-        <div class="card-body">
+        <div class="card-header">
             <h2>Address</h2>
+        </div>
+        <div class="card-body">
             <div>
                 <ul style="list-style-type: none;">
-                    <li>
-                        <strong>Full Name:</strong> @(Model.Address != null ? Model.Address.FullName : "N/A")
-                    </li>
-                    <li>
-                        <strong>Phone Number:</strong> @(Model.Address != null ? Model.Address.PhoneNumber : "N/A")
-                    </li>
-                    <li>
-                        <strong>Street Address:</strong> @(Model.Address != null ? Model.Address.StreetAddress : "N/A")
-                    </li>
-                    <li>
-                        <strong>Apt/Suite:</strong> @(Model.Address != null && !string.IsNullOrEmpty(Model.Address.AptSuite) ? Model.Address.AptSuite : "N/A")
-                    </li>
-                    <li>
-                        <strong>City:</strong> @(Model.Address != null ? Model.Address.City : "N/A")
-                    </li>
-                    <li>
-                        <strong>Province:</strong> @(Model.Address != null ? Model.Address.Province : "N/A")
-                    </li>
-                    <li>
-                        <strong>Postal Code:</strong> @(Model.Address != null ? Model.Address.PostalCode : "N/A")
-                    </li>
-                    <li>
-                        <strong>Delivery Instructions:</strong> @(Model.Address != null && !string.IsNullOrEmpty(Model.Address.DeliveryInstructions) ? Model.Address.DeliveryInstructions : "N/A")
-                    </li>
+                    <li><strong>Full Name:</strong> @(Model.Address != null ? Model.Address.FullName : "N/A")</li>
+                    <li><strong>Phone Number:</strong> @(Model.Address != null ? Model.Address.PhoneNumber : "N/A")</li>
+                    <li><strong>Street Address:</strong> @(Model.Address != null ? Model.Address.StreetAddress : "N/A")</li>
+                    <li><strong>Apt/Suite:</strong> @(Model.Address != null && !string.IsNullOrEmpty(Model.Address.AptSuite) ? Model.Address.AptSuite : "N/A")</li>
+                    <li><strong>City:</strong> @(Model.Address != null ? Model.Address.City : "N/A")</li>
+                    <li><strong>Province:</strong> @(Model.Address != null ? Model.Address.Province : "N/A")</li>
+                    <li><strong>Postal Code:</strong> @(Model.Address != null ? Model.Address.PostalCode : "N/A")</li>
+                    <li><strong>Delivery Instructions:</strong> @(Model.Address != null && !string.IsNullOrEmpty(Model.Address.DeliveryInstructions) ? Model.Address.DeliveryInstructions : "N/A")</li>
                     <li><strong>Same As Shipping Address:</strong> @(Model != null ? (Model.Address.SameAsShippingAddress ? "Yes" : "No") : "N/A")</li>
                 </ul>
                 <a asp-controller="Account" asp-action="Address" class="btn btn-primary">Update Address</a>
             </div>
         </div>
     </div>
-
 </div>

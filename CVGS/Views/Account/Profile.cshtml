@@ -3,57 +3,59 @@
     ViewData["Title"] = "Profile";
 }
 
-<h2>Profile</h2>
-
-@if (!ViewData.ModelState.IsValid)
-{
-    <div class="alert alert-danger">
-        <strong>There were some errors with your profile update:</strong>
-        <ul>
-            @foreach (var entry in ViewData.ModelState)
-            {
-                foreach (var error in entry.Value.Errors)
-                {
-                    <li>@error.ErrorMessage</li>
-                }
-            }
-        </ul>
+<div class="card">
+    <div class="card-header">
+        <h2>Profile</h2>
     </div>
-}
+    <div class="card-body">
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                <strong>There were some errors with your profile update:</strong>
+                <ul>
+                    @foreach (var entry in ViewData.ModelState)
+                    {
+                        foreach (var error in entry.Value.Errors)
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    }
+                </ul>
+            </div>
+        }
 
-<form asp-action="Profile" method="post">
-    <div class="mb-3">
-        <label asp-for="ActualName" class="form-label"></label>
-        <input asp-for="ActualName" class="form-control" />
-        <span asp-validation-for="ActualName" class="text-danger"></span>
+        <form asp-action="Profile" method="post">
+            <div class="mb-3">
+                <label asp-for="ActualName" class="form-label"></label>
+                <input asp-for="ActualName" class="form-control" />
+                <span asp-validation-for="ActualName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Gender" class="form-label"></label>
+                <select asp-for="Gender" class="form-select">
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="BirthDate" class="form-label"></label>
+                <input asp-for="BirthDate" class="form-control" type="date" />
+                <span asp-validation-for="BirthDate" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3 form-check">
+                <input asp-for="ReceivePromotionalEmails" class="form-check-input" type="checkbox" />
+                <label asp-for="ReceivePromotionalEmails" class="form-check-label">Receive promotional emails from CVGS</label>
+                <span asp-validation-for="ReceivePromotionalEmails" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Update Profile</button>
+            <a asp-controller="Account" asp-action="Dashboard" class="btn btn-success">Back to Dashboard</a>
+        </form>
     </div>
-
-    <div class="mb-3">
-        <label asp-for="Gender" class="form-label"></label>
-        <select asp-for="Gender" class="form-select">
-            <option value="">Select Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-        </select>
-        <span asp-validation-for="Gender" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="BirthDate" class="form-label"></label>
-        <input asp-for="BirthDate" class="form-control" type="date" />
-        <span asp-validation-for="BirthDate" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3 form-check">
-        <input asp-for="ReceivePromotionalEmails" class="form-check-input" type="checkbox" />
-        <label asp-for="ReceivePromotionalEmails" class="form-check-label">Receive promotional emails from CVGS</label>
-        <span asp-validation-for="ReceivePromotionalEmails" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Update Profile</button>
-</form>
-
-<div>
-    <a asp-controller="Account" asp-action="Dashboard" class="btn btn-link">Back to Dashboard</a>
 </div>

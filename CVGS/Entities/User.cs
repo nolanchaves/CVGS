@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using CVGS.Entities.CVGS.Entities;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
 namespace CVGS.Entities
@@ -32,10 +33,9 @@ namespace CVGS.Entities
 
         public bool? SameAsShippingAddress { get; set; }
 
-        // Favorite Platforms, Game Categories, and Languages
-        public List<string>? FavouritePlatforms { get; set; } = new List<string>();
-        public List<string>? FavouriteGameCategories { get; set; } = new List<string>();
-        public List<string>? LanguagePreferences { get; set; } = new List<string>();
+        // Navigation property for Preference
+        public int? PreferenceId { get; set; }
+        public Preference? Preferences { get; set; }
     }
 
     public class NotFutureDateAttribute : ValidationAttribute

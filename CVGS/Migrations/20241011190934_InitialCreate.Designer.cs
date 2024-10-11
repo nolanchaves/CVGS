@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CVGS.Migrations
 {
     [DbContext(typeof(CvgsDbContext))]
-    [Migration("20241011112319_UserNormalization")]
-    partial class UserNormalization
+    [Migration("20241011190934_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace CVGS.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CVGS.Entities.Address", b =>
+            modelBuilder.Entity("Address", b =>
                 {
                     b.Property<int>("AddressId")
                         .ValueGeneratedOnAdd()
@@ -64,9 +64,48 @@ namespace CVGS.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("AddressId");
 
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
+
                     b.ToTable("Address");
+                });
+
+            modelBuilder.Entity("CVGS.Entities.CVGS.Entities.Preference", b =>
+                {
+                    b.Property<int>("PreferenceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PreferenceId"));
+
+                    b.Property<string>("FavouriteGameCategories")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FavouritePlatforms")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LanguagePreferences")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("PreferenceId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Preference");
                 });
 
             modelBuilder.Entity("CVGS.Entities.User", b =>
@@ -99,19 +138,10 @@ namespace CVGS.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FavouriteGameCategories")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FavouritePlatforms")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Gender")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LanguagePreferences")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -150,6 +180,9 @@ namespace CVGS.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ShippingAddressAddressId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("ShippingAddressId")
                         .HasColumnType("int");
 
@@ -162,8 +195,6 @@ namespace CVGS.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
-
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -172,7 +203,7 @@ namespace CVGS.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("ShippingAddressId");
+                    b.HasIndex("ShippingAddressAddressId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -310,17 +341,31 @@ namespace CVGS.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Address", b =>
+                {
+                    b.HasOne("CVGS.Entities.User", "User")
+                        .WithOne("Address")
+                        .HasForeignKey("Address", "UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("CVGS.Entities.CVGS.Entities.Preference", b =>
+                {
+                    b.HasOne("CVGS.Entities.User", "User")
+                        .WithOne("Preferences")
+                        .HasForeignKey("CVGS.Entities.CVGS.Entities.Preference", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("CVGS.Entities.User", b =>
                 {
-                    b.HasOne("CVGS.Entities.Address", "Address")
+                    b.HasOne("Address", "ShippingAddress")
                         .WithMany()
-                        .HasForeignKey("AddressId");
-
-                    b.HasOne("CVGS.Entities.Address", "ShippingAddress")
-                        .WithMany()
-                        .HasForeignKey("ShippingAddressId");
-
-                    b.Navigation("Address");
+                        .HasForeignKey("ShippingAddressAddressId");
 
                     b.Navigation("ShippingAddress");
                 });
@@ -374,6 +419,13 @@ namespace CVGS.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CVGS.Entities.User", b =>
+                {
+                    b.Navigation("Address");
+
+                    b.Navigation("Preferences");
                 });
 #pragma warning restore 612, 618
         }
