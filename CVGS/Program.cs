@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using CVGS;
-using CVGS.Interfaces;
-using NETCore.MailKit.Core;
 using CVGS.Entities;
+using NETCore.MailKit.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +34,11 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Lockout.AllowedForNewUsers = true;
 });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+});
+
 // Configure session services
 builder.Services.AddSession(options =>
 {
@@ -43,11 +47,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-// Configure Email settings
-builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
-
-// Register your custom email sender
-builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.AddScoped<EmailService>();
 
 var app = builder.Build();
 

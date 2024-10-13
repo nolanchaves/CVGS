@@ -4,6 +4,7 @@ using CVGS;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CVGS.Migrations
 {
     [DbContext(typeof(CvgsDbContext))]
-    partial class CvgsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241012175128_ShippingAddressEntityUpdate")]
+    partial class ShippingAddressEntityUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,11 +49,6 @@ namespace CVGS.Migrations
                     b.Property<string>("DeliveryInstructions")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
-
                     b.Property<string>("PostalCode")
                         .IsRequired()
                         .HasMaxLength(6)
@@ -64,9 +62,6 @@ namespace CVGS.Migrations
                     b.Property<bool?>("SameAsShippingAddress")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ShippingAddressId")
-                        .HasColumnType("int");
-
                     b.Property<string>("StreetAddress")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -76,8 +71,6 @@ namespace CVGS.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("AddressId");
-
-                    b.HasIndex("ShippingAddressId");
 
                     b.HasIndex("UserId")
                         .IsUnique()
@@ -120,59 +113,6 @@ namespace CVGS.Migrations
                         .IsUnique();
 
                     b.ToTable("Preferences");
-                });
-
-            modelBuilder.Entity("CVGS.Entities.ShippingAddress", b =>
-                {
-                    b.Property<int>("ShippingAddressId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShippingAddressId"));
-
-                    b.Property<string>("ShippingAptSuite")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ShippingCity")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("ShippingCountry")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("ShippingPhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
-
-                    b.Property<string>("ShippingPostalCode")
-                        .IsRequired()
-                        .HasMaxLength(6)
-                        .HasColumnType("nvarchar(6)");
-
-                    b.Property<string>("ShippingProvince")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("ShippingStreetAddress")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ShippingAddressId");
-
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL");
-
-                    b.ToTable("ShippingAddresses");
                 });
 
             modelBuilder.Entity("CVGS.Entities.User", b =>
@@ -240,8 +180,15 @@ namespace CVGS.Migrations
                     b.Property<bool?>("ReceivePromotionalEmails")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ShippingAddressAddressId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("ShippingAddressId")
                         .HasColumnType("int");
@@ -262,6 +209,8 @@ namespace CVGS.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("ShippingAddressAddressId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -401,15 +350,9 @@ namespace CVGS.Migrations
 
             modelBuilder.Entity("Address", b =>
                 {
-                    b.HasOne("CVGS.Entities.ShippingAddress", "ShippingAddress")
-                        .WithMany()
-                        .HasForeignKey("ShippingAddressId");
-
                     b.HasOne("CVGS.Entities.User", "User")
                         .WithOne("Address")
                         .HasForeignKey("Address", "UserId");
-
-                    b.Navigation("ShippingAddress");
 
                     b.Navigation("User");
                 });
@@ -425,13 +368,13 @@ namespace CVGS.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CVGS.Entities.ShippingAddress", b =>
+            modelBuilder.Entity("CVGS.Entities.User", b =>
                 {
-                    b.HasOne("CVGS.Entities.User", "User")
-                        .WithOne("ShippingAddress")
-                        .HasForeignKey("CVGS.Entities.ShippingAddress", "UserId");
+                    b.HasOne("Address", "ShippingAddress")
+                        .WithMany()
+                        .HasForeignKey("ShippingAddressAddressId");
 
-                    b.Navigation("User");
+                    b.Navigation("ShippingAddress");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -490,8 +433,6 @@ namespace CVGS.Migrations
                     b.Navigation("Address");
 
                     b.Navigation("Preferences");
-
-                    b.Navigation("ShippingAddress");
                 });
 #pragma warning restore 612, 618
         }

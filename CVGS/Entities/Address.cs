@@ -7,6 +7,11 @@ public class Address
     public int AddressId { get; set; }
 
     [Required]
+    [StringLength(15)]
+    [DataType(DataType.PhoneNumber)]
+    public string PhoneNumber { get; set; }
+
+    [Required]
     [StringLength(100)]
     public string StreetAddress { get; set; }
 
@@ -30,6 +35,11 @@ public class Address
 
     public string? DeliveryInstructions { get; set; }
 
-    public string? UserId { get; set; } // Make this nullable
-    public User? User { get; set; } // Make this nullable
+    public bool? SameAsShippingAddress { get; set; }
+
+    public string? UserId { get; set; }
+    public User? User { get; set; }
+
+    public int? ShippingAddressId { get; set; }
+    public ShippingAddress? ShippingAddress { get; set; }
 }
