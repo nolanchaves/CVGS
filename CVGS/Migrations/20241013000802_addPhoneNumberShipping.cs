@@ -5,15 +5,16 @@
 namespace CVGS.Migrations
 {
     /// <inheritdoc />
-    public partial class RoleFullName : Migration
+    public partial class addPhoneNumberShipping : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "FullName",
-                table: "AspNetUsers",
-                type: "nvarchar(max)",
+                name: "PhoneNumber",
+                table: "ShippingAddresses",
+                type: "nvarchar(15)",
+                maxLength: 15,
                 nullable: false,
                 defaultValue: "");
         }
@@ -22,8 +23,8 @@ namespace CVGS.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "FullName",
-                table: "AspNetUsers");
+                name: "PhoneNumber",
+                table: "ShippingAddresses");
         }
     }
 }

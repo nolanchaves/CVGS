@@ -1,34 +1,45 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CVGS.Entities;
+using System.ComponentModel.DataAnnotations;
 
-namespace CVGS.Entities
+public class Address
 {
-    public class Address
-    {
-        [Key]
-        public int AddressId { get; set; }
+    [Key]
+    public int AddressId { get; set; }
 
-        [Required]
-        [StringLength(100)]
-        public string StreetAddress { get; set; }
+    [Required]
+    [StringLength(15)]
+    [DataType(DataType.PhoneNumber)]
+    public string PhoneNumber { get; set; }
 
-        public string? AptSuite { get; set; }
+    [Required]
+    [StringLength(100)]
+    public string StreetAddress { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public string City { get; set; }
+    public string? AptSuite { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public string Province { get; set; }
+    [Required]
+    [StringLength(50)]
+    public string City { get; set; }
 
-        [Required]
-        [StringLength(6)]
-        public string PostalCode { get; set; }
+    [Required]
+    [StringLength(50)]
+    public string Province { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public string Country { get; set; }
+    [Required]
+    [StringLength(6)]
+    public string PostalCode { get; set; }
 
-        public string? DeliveryInstructions { get; set; }
-    }
+    [Required]
+    [StringLength(50)]
+    public string Country { get; set; }
+
+    public string? DeliveryInstructions { get; set; }
+
+    public bool? SameAsShippingAddress { get; set; }
+
+    public string? UserId { get; set; }
+    public User? User { get; set; }
+
+    public int? ShippingAddressId { get; set; }
+    public ShippingAddress? ShippingAddress { get; set; }
 }

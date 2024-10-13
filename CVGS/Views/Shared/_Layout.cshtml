@@ -10,57 +10,104 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CVGS</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Events">Events</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Games" asp-action="GameList">Games</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Games" asp-action="WishList">Wish List</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Friends" asp-action="FriendsList">Friends List</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    @if (User.Identity.IsAuthenticated)
-                    {
+        @if (User.IsInRole("Admin"))
+        {
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                <div class="container-fluid">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CVGS</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="d-flex justify-content-between w-100">
                         <div class="d-flex align-items-center">
-                            <a asp-controller="Account" asp-action="Dashboard" class="me-2 btn btn-link text-decoration-none">Dashboard</a>
-                            <span class="me-2">Hello, @User.Identity.Name!</span>
-                            <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline;">
-                                <button type="submit" class="btn btn-link text-decoration-none">Logout</button>
-                            </form>
+                            <a asp-controller="Account" asp-action="Panel" class="me-2 btn btn-link text-decoration-none">Admin Panel</a>
                         </div>
-                    }
-                    else
-                    {
-                        <div class="d-flex align-items-center">
-                            <a asp-controller="Account" asp-action="Login" class="btn btn-link text-decoration-none me-2">Login</a>
-                            <a asp-controller="Account" asp-action="SignUp" class="btn btn-link text-decoration-none">Sign Up</a>
+                        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <div class="d-flex align-items-center">
+                                    <a asp-controller="Account" asp-action="Dashboard" class="me-2 btn btn-link text-decoration-none">Dashboard</a>
+                                    <span class="me-2">Hello, @User.Identity.Name!</span>
+                                    <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline;">
+                                        <button type="submit" class="btn btn-link text-decoration-none">Logout</button>
+                                    </form>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="d-flex align-items-center">
+                                    <a asp-controller="Account" asp-action="Login" class="btn btn-link text-decoration-none me-2">Login</a>
+                                    <a asp-controller="Account" asp-action="SignUp" class="btn btn-link text-decoration-none">Sign Up</a>
+                                </div>
+                            }
                         </div>
-                    }
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
+        }
+
+        else
+        {
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                <div class="container-fluid">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CVGS</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Events">Events</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Games" asp-action="GameList">Games</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Games" asp-action="WishList">Wish List</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Friends" asp-action="FriendsList">Friends List</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            </li>
+                        </ul>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="d-flex align-items-center">
+                                <a asp-controller="Account" asp-action="Dashboard" class="me-2 btn btn-link text-decoration-none">Dashboard</a>
+                                <span class="me-2">Hello, @User.Identity.Name!</span>
+                                <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-link text-decoration-none">Logout</button>
+                                </form>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="d-flex align-items-center">
+                                <a asp-controller="Account" asp-action="Login" class="btn btn-link text-decoration-none me-2">Login</a>
+                                <a asp-controller="Account" asp-action="SignUp" class="btn btn-link text-decoration-none">Sign Up</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </nav>
+        }
+
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">
+                    @TempData["SuccessMessage"]
+                </div>
+            }
             @RenderBody()
         </main>
     </div>

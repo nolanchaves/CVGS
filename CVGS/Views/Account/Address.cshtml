@@ -1,71 +1,155 @@
 ﻿@model AddressViewModel
-<h2>Address</h2>
-@if (!ViewData.ModelState.IsValid)
-{
-    <div class="alert alert-danger">
-        <strong>There were some errors with your log in:</strong>
-        <ul>
-            @foreach (var entry in ViewData.ModelState)
-            {
-                foreach (var error in entry.Value.Errors)
-                {
-                    <li>@error.ErrorMessage</li>
-                }
-            }
-        </ul>
-    </div>
-}
-
 <form asp-action="Address" method="post">
-    <div class="mb-3">
-        <label for="FullName" class="form-label">Full Name:</label>
-        <input asp-for="FullName" class="form-control" />
+    <!-- Regular Address Form -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Address</h2>
+        </div>
+        <div class="card-body">
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger">
+                    <strong>There were some errors with your address submission:</strong>
+                    <ul>
+                        @foreach (var entry in ViewData.ModelState)
+                        {
+                            foreach (var error in entry.Value.Errors)
+                            {
+                                <li>@error.ErrorMessage</li>
+                            }
+                        }
+                    </ul>
+                </div>
+            }
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="FullName" class="form-label">Full Name:</label>
+                    <input asp-for="FullName" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label for="PhoneNumber" class="form-label">Phone Number:</label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="StreetAddress" class="form-label">Street Address:</label>
+                    <input asp-for="StreetAddress" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label for="AptSuite" class="form-label">Apt / Suite:</label>
+                    <input asp-for="AptSuite" class="form-control" />
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="City" class="form-label">City:</label>
+                    <input asp-for="City" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label for="Province" class="form-label">Province:</label>
+                    <input asp-for="Province" class="form-control" />
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="PostalCode" class="form-label">Postal Code:</label>
+                    <input asp-for="PostalCode" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label for="Country" class="form-label">Country:</label>
+                    <input asp-for="Country" class="form-control" />
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="DeliveryInstructions" class="form-label">Delivery Instructions:</label>
+                <textarea asp-for="DeliveryInstructions" class="form-control"></textarea>
+            </div>
+
+            <div class="mb-3 form-check">
+                <input asp-for="SameAsShippingAddress" type="checkbox" class="form-check-input" id="sameAsShippingCheckbox" />
+                <label class="form-check-label" for="SameAsShippingAddress">Same as shipping address</label>
+            </div>
+        </div>
     </div>
 
-    <div class="mb-3">
-        <label for="PhoneNumber" class="form-label">Phone Number:</label>
-        <input asp-for="PhoneNumber" class="form-control" />
-    </div>
+    <!-- Shipping Address Form -->
+    <div id="shippingFields" class="card" style="@(Model.SameAsShippingAddress ? "display:none;" : "display:block;")">
+        <div class="card-header">
+            <h2>Shipping Address</h2>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="ShippingFullName" class="form-label">Full Name:</label>
+                    <input asp-for="ShippingFullName" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label for="ShippingPhoneNumber" class="form-label">Phone Number:</label>
+                    <input asp-for="ShippingPhoneNumber" class="form-control" />
+                </div>
+            </div>
 
-    <div class="mb-3">
-        <label for="StreetAddress" class="form-label">Street Address:</label>
-        <input asp-for="StreetAddress" class="form-control" />
-    </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="ShippingStreetAddress" class="form-label">Street Address:</label>
+                    <input asp-for="ShippingStreetAddress" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label for="ShippingAptSuite" class="form-label">Apt / Suite:</label>
+                    <input asp-for="ShippingAptSuite" class="form-control" />
+                </div>
+            </div>
 
-    <div class="mb-3">
-        <label for="AptSuite" class="form-label">Apt / Suite:</label>
-        <input asp-for="AptSuite" class="form-control" />
-    </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="ShippingCity" class="form-label">City:</label>
+                    <input asp-for="ShippingCity" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label for="ShippingProvince" class="form-label">Province:</label>
+                    <input asp-for="ShippingProvince" class="form-control" />
+                </div>
+            </div>
 
-    <div class="mb-3">
-        <label for="City" class="form-label">City:</label>
-        <input asp-for="City" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label for="Province" class="form-label">Province:</label>
-        <input asp-for="Province" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label for="PostalCode" class="form-label">Postal Code:</label>
-        <input asp-for="PostalCode" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label for="Country" class="form-label">Country:</label>
-        <input asp-for="Country" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label for="DeliveryInstructions" class="form-label">Delivery Instructions:</label>
-        <textarea asp-for="DeliveryInstructions" class="form-control"></textarea>
-    </div>
-
-    <div class="mb-3 form-check">
-        <input asp-for="SameAsShippingAddress" type="checkbox" class="form-check-input" />
-        <label class="form-check-label" for="SameAsShippingAddress">Same as shipping address</label>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="ShippingPostalCode" class="form-label">Postal Code:</label>
+                    <input asp-for="ShippingPostalCode" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label for="ShippingCountry" class="form-label">Country:</label>
+                    <input asp-for="ShippingCountry" class="form-control" />
+                </div>
+            </div>
+        </div>
     </div>
 
     <button type="submit" class="btn btn-primary">Save Address</button>
+    <a asp-controller="Account" asp-action="Dashboard" class="btn btn-success">Back to Dashboard</a>
 </form>
+
+<script>
+    document.getElementById('sameAsShippingCheckbox').addEventListener('change', function () {
+        var shippingFields = document.getElementById('shippingFields');
+        if (this.checked) {
+            shippingFields.style.display = 'none';
+        } else {
+            shippingFields.style.display = 'block';
+        }
+    });
+
+    window.onload = function () {
+        var checkbox = document.getElementById('sameAsShippingCheckbox');
+        var shippingFields = document.getElementById('shippingFields');
+        if (checkbox.checked) {
+            shippingFields.style.display = 'none';
+        }
+    };
+</script>
+
