@@ -1,4 +1,4 @@
-﻿using CVGS.Entities.CVGS.Entities;
+﻿using CVGS.Entities;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
