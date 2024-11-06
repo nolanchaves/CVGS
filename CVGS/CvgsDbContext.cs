@@ -1,5 +1,4 @@
 ﻿using CVGS.Entities;
-using CVGS.Entities.CVGS.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +34,10 @@ namespace CVGS
                 .HasOne(u => u.ShippingAddress)
                 .WithOne(s => s.User)
                 .HasForeignKey<ShippingAddress>(s => s.UserId);
+            
+            //builder.Entity<User>()
+            //    .HasMany(u => u.Review)
+            //    .WithOne(s => s.User);
 
             builder.Entity<Game>().HasData(
             // PC Games
@@ -79,6 +82,58 @@ namespace CVGS
             new Game { GameID = 29, Title = "Mario Kart 8 Deluxe", Description = "A fun kart-racing game featuring Nintendo characters.", Platform = "Nintendo Switch", Category = "Racing", LanguageSupport = "English, Italian", Price = 59.99m, Rating = 9.2f, CoverImageURL = "/images/mario_kart8.jpg", DownloadSize = 5000000000 },
             new Game { GameID = 30, Title = "Splatoon 3", Description = "A colorful third-person shooter where ink is your weapon.", Platform = "Nintendo Switch", Category = "Shooter", LanguageSupport = "English, French", Price = 59.99m, Rating = 8.8f, CoverImageURL = "/images/splatoon3.jpg", DownloadSize = 2500000000 }
         );
+
+            builder.Entity<Review>(b => {
+
+                b.HasOne(r => r.Game)
+                .WithMany(g => g.Review)
+                .HasForeignKey(r => r.GameId);
+
+                b.HasOne(r => r.User)
+                .WithMany(u => u.Review)
+                .HasForeignKey(r => r.UserId);
+
+                b.HasData(
+                    new Review() {
+                        Id=1,
+                        UserId = "05e61254-11dc-44d9-89e7-0e574ce7099a",
+                        GameId = 1, Content = "Black  jack", Rating = 1, Approved = true
+                    },
+                    new Review() {
+                        Id=5,
+                        UserId= "6c9c58e6-5b8d-42c5-8cf9-1e7c7480f5d2",
+                        GameId = 6, Content = "Epic cyberpunky game", Rating = null,
+                        Approved = true
+                    },
+                    new Review()
+                    {
+                        Id = 2,
+                        UserId = "042f95a1-3247-4e6a-a375-d2165a8bf16c",
+                        GameId = 11,
+                        Content = "sui",
+                        Rating = 5,
+                        Approved = false
+                    },
+                    new Review()
+                    {
+                        Id = 3,
+                        UserId = "88193658-5295-478b-9f7e-534f739a06bc",
+                        GameId = 21,
+                        Content = "john uncharted",
+                        Rating = 3,
+                        Approved = true
+                    },
+                    new Review()
+                    {
+                        Id = 4,
+                        UserId = "bac4f198-0003-438a-a347-2c27bc0e0ffa",
+                        GameId = 26,
+                        Content = "very open",
+                        Rating = null,
+                        Approved = true
+                    }
+                );
+            });
         }
 
 
@@ -86,6 +141,7 @@ namespace CVGS
         public DbSet<Address> Addresses { get; set; }
         public DbSet<ShippingAddress> ShippingAddresses { get; set; }
         public DbSet<Game> Games { get; set; }
+        public DbSet<Review>Review {  get; set; }
 
     }
 }

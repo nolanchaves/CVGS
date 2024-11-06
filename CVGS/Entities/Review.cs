@@ -9,16 +9,24 @@ namespace CVGS.Entities
         [Key]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Author is required")]
-        [StringLength(150, ErrorMessage = "Author cannot exceed 150 characters")]
-        public string Author { get; set; }
+        [Required]
+        //[ForeignKey("GameId")]
+        public int GameId {  get; set; }
+        public Game Game { get; set; }
 
-        [Required(ErrorMessage = "Content is required")]
+        [Required(ErrorMessage = "Author is required")]
+        //public string UserName {  get; set; }
+        public string UserId { get; set; }
+        public User User { get; set; } 
+
         [DataType(DataType.MultilineText)]
-        public string Content { get; set; }
+        public string? Content { get; set; }
 
         [Display(Name = "Rating")]
         [Range(1, 5, ErrorMessage = "Rating must be between 1 and 5")]
-        public float Rating { get; set; }
+        public int? Rating { get; set; }
+
+        [Required]
+        public bool Approved { get; set; } = false;
     }
 }

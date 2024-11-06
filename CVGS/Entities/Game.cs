@@ -31,6 +31,7 @@
 
         [Range(0, 10)]
         public double Rating { get; set; }
+        public IEnumerable<Review>? Review { get; set; }
 
         [StringLength(500)]
         public string CoverImageURL { get; set; }

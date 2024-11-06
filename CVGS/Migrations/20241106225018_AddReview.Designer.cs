@@ -4,6 +4,7 @@ using CVGS;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CVGS.Migrations
 {
     [DbContext(typeof(CvgsDbContext))]
-    partial class CvgsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241106225018_AddReview")]
+    partial class AddReview
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -615,32 +618,6 @@ namespace CVGS.Migrations
                             Content = "Epic cyberpunky game",
                             GameId = 6,
                             UserId = "6c9c58e6-5b8d-42c5-8cf9-1e7c7480f5d2"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Approved = false,
-                            Content = "sui",
-                            GameId = 11,
-                            Rating = 5,
-                            UserId = "042f95a1-3247-4e6a-a375-d2165a8bf16c"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Approved = true,
-                            Content = "john uncharted",
-                            GameId = 21,
-                            Rating = 3,
-                            UserId = "88193658-5295-478b-9f7e-534f739a06bc"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Approved = true,
-                            Content = "very open",
-                            GameId = 26,
-                            UserId = "bac4f198-0003-438a-a347-2c27bc0e0ffa"
                         });
                 });
 

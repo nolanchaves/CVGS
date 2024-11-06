@@ -1,6 +1,7 @@
 ﻿using CVGS.Entities;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CVGS.Entities
 {
@@ -27,5 +28,8 @@ namespace CVGS.Entities
 
         public int? PreferenceId { get; set; }
         public Preference? Preferences { get; set; }
+
+        //[ForeignKey("ReviewId")]
+        public IEnumerable<Review>? Review { get; set; }
     }
 }

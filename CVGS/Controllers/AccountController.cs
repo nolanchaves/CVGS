@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
-using CVGS.Entities.CVGS.Entities;
 using System.Data;
 using NETCore.MailKit.Core;
 using MailKit.Net.Smtp;
