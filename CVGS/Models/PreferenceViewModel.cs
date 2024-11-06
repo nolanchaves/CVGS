@@ -14,20 +14,23 @@
         AvailablePlatforms.AddRange(new List<string>
         {
             "PC",
-            "Xbox",
-            "PlayStation",
-            "Nintendo Switch",
-            "Mobile"
+            "Xbox Series S/X",
+            "Xbox One",
+            "PlayStation 5",
+            "PlayStation 4",
+            "Nintendo Switch"
         });
 
         AvailableGameCategories.AddRange(new List<string>
         {
             "Action",
             "Adventure",
+            "Multiplayer",
             "RPG",
             "Simulation",
             "Strategy",
-            "Sports"
+            "Sports",
+            "Shooter"
         });
 
         AvailableLanguages.AddRange(new List<string>

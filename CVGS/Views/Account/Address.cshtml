@@ -24,10 +24,6 @@
 
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label for="FullName" class="form-label">Full Name:</label>
-                    <input asp-for="FullName" class="form-control" />
-                </div>
-                <div class="col-md-6">
                     <label for="PhoneNumber" class="form-label">Phone Number:</label>
                     <input asp-for="PhoneNumber" class="form-control" />
                 </div>
@@ -51,8 +47,13 @@
                 </div>
                 <div class="col-md-6">
                     <label for="Province" class="form-label">Province:</label>
-                    <input asp-for="Province" class="form-control" />
+                    @Html.DropDownListFor(m => m.Province,
+                             new SelectList(Model.Provinces),
+                             "-- Select a Province --",
+                             new { @class = "form-control" })
+                    <span asp-validation-for="Province" class="text-danger"></span>
                 </div>
+
             </div>
 
             <div class="row mb-3">
@@ -86,10 +87,6 @@
         <div class="card-body">
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label for="ShippingFullName" class="form-label">Full Name:</label>
-                    <input asp-for="ShippingFullName" class="form-control" />
-                </div>
-                <div class="col-md-6">
                     <label for="ShippingPhoneNumber" class="form-label">Phone Number:</label>
                     <input asp-for="ShippingPhoneNumber" class="form-control" />
                 </div>
@@ -113,8 +110,13 @@
                 </div>
                 <div class="col-md-6">
                     <label for="ShippingProvince" class="form-label">Province:</label>
-                    <input asp-for="ShippingProvince" class="form-control" />
+                    @Html.DropDownListFor(m => m.Province,
+                             new SelectList(Model.Provinces),
+                             "-- Select a Province --",
+                             new { @class = "form-control" })
+                    <span asp-validation-for="Province" class="text-danger"></span>
                 </div>
+
             </div>
 
             <div class="row mb-3">
