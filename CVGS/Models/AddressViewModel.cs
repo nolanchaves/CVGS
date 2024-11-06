@@ -3,9 +3,6 @@
 namespace CVGS.Models;
 public class AddressViewModel
 {
-    [Required(ErrorMessage = "Full name is required.")]
-    public string FullName { get; set; }
-
     [Required(ErrorMessage = "Phone number is required.")]
     [Phone(ErrorMessage = "Invalid phone number.")]
     public string PhoneNumber { get; set; }
@@ -22,6 +19,8 @@ public class AddressViewModel
     public string Province { get; set; }
 
     [Required(ErrorMessage = "Postal code is required.")]
+    [RegularExpression(@"^[A-CEGHJ-NPR-TVXY]\d[A-CEGHJ-NPR-TV-Z] \d[A-CEGHJ-NPR-TV-Z]\d$",
+        ErrorMessage = "Please enter a valid Canadian postal code in the format A1A 1A1.")]
     public string PostalCode { get; set; }
 
     [Required(ErrorMessage = "Country is required.")]
@@ -33,12 +32,35 @@ public class AddressViewModel
 
 
     //Shipping Address
-    public string? ShippingFullName { get; set; }
     public string? ShippingPhoneNumber { get; set; }
     public string? ShippingStreetAddress { get; set; }
     public string? ShippingAptSuite { get; set; }
     public string? ShippingCity { get; set; }
     public string? ShippingProvince { get; set; }
+    [RegularExpression(@"^[A-CEGHJ-NPR-TVXY]\d[A-CEGHJ-NPR-TV-Z] \d[A-CEGHJ-NPR-TV-Z]\d$",
+    ErrorMessage = "Please enter a valid Canadian postal code in the format A1A 1A1.")]
     public string? ShippingPostalCode { get; set; }
     public string? ShippingCountry { get; set; }
+
+    public List<string> Provinces { get; set; } = new List<string>();
+
+    public AddressViewModel()
+    {
+        Provinces.AddRange(new List<string>
+        {
+        "Alberta",
+        "British Columbia",
+        "Manitoba",
+        "New Brunswick",
+        "Newfoundland and Labrador",
+        "Nova Scotia",
+        "Ontario",
+        "Prince Edward Island",
+        "Quebec",
+        "Saskatchewan",
+        "Northwest Territories",
+        "Nunavut",
+        "Yukon"
+        });
+    }
 }

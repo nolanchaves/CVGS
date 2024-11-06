@@ -175,7 +175,7 @@ namespace CVGS.Controllers
                             if (roles.Contains("Admin"))
                             {
                                 Debug.WriteLine("Redirecting to Admin Panel.");
-                                return RedirectToAction("Panel", "Account");
+                                return RedirectToAction("Panel", "Admin");
                             }
                             else
                             {
@@ -262,7 +262,6 @@ namespace CVGS.Controllers
 
                 Address = new AddressViewModel
                 {
-                    FullName = user.FullName ?? "N/A",
                     PhoneNumber = user.Address?.PhoneNumber ?? "N/A",
                     StreetAddress = user.Address?.StreetAddress ?? "N/A",
                     AptSuite = user.Address?.AptSuite ?? "N/A",
@@ -272,7 +271,6 @@ namespace CVGS.Controllers
                     Country = user.Address?.Country ?? "N/A",
                     DeliveryInstructions = user.Address?.DeliveryInstructions ?? "N/A",
                     SameAsShippingAddress = user.Address?.SameAsShippingAddress ?? false,
-                    ShippingFullName = user.FullName,
                     ShippingPhoneNumber = user.ShippingAddress?.ShippingPhoneNumber ?? "N/A",
                     ShippingStreetAddress = user.ShippingAddress?.ShippingStreetAddress ?? "N/A",
                     ShippingAptSuite = user.ShippingAddress?.ShippingAptSuite ?? "N/A",
@@ -447,7 +445,6 @@ namespace CVGS.Controllers
                 var model = new AddressViewModel
                 {
                     //Address
-                    FullName = user.FullName,
                     PhoneNumber = existingAddress?.PhoneNumber,
                     StreetAddress = existingAddress?.StreetAddress,
                     AptSuite = existingAddress?.AptSuite,
@@ -459,7 +456,6 @@ namespace CVGS.Controllers
                     SameAsShippingAddress = existingAddress?.SameAsShippingAddress ?? false,
 
                     //Shipping Address
-                    ShippingFullName = user.FullName,
                     ShippingStreetAddress = shippingAddress?.ShippingStreetAddress,
                     ShippingAptSuite = shippingAddress?.ShippingAptSuite,
                     ShippingCity = shippingAddress?.ShippingCity,
@@ -602,9 +598,87 @@ namespace CVGS.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
 
-        [Authorize(Policy = "Admin")]
-        public IActionResult Panel()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            // Find the user by email
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                return RedirectToAction("ForgotPasswordConfirmation");
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var resetLink = Url.Action("ResetPassword", "Account", new { token = token, email = model.Email }, Request.Scheme);
+
+            var subject = "Password Reset Request";
+            var body = $@"<p>Click <a href='{resetLink}'>here</a> to reset your password.</p>
+                      <p>If you did not request a password reset, please ignore this email.</p>";
+
+            await _emailService.SendEmailAsync(model.Email, subject, body);
+
+            return RedirectToAction("ForgotPasswordConfirmation");
+        }
+
+        [HttpGet]
+        public IActionResult ForgotPasswordConfirmation()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ResetPassword(string token, string email)
+        {
+            if (token == null || email == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var model = new ResetPasswordViewModel { Token = token, Email = email };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user == null)
+                {
+                    return RedirectToAction("ResetPasswordConfirmation");
+                }
+
+                var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("ResetPasswordConfirmation");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult ResetPasswordConfirmation()
         {
             return View();
         }
@@ -618,13 +692,12 @@ namespace CVGS.Controllers
             var validationLink = Url.Action("ValidateEmail", "Account", new { userId = userId, token = token }, Request.Scheme);
             var subject = "Email Validation";
             var body = $@"<p>Thank you for signing up!</p>
-            <p>Please validate your email by clicking {validationLink} here</a> to verify your account.</p>
+            <p>Please validate your email by clicking <a href = '{validationLink}'>here</a> to verify your account.</p>
             <p>If you did not sign up, please ignore this email.</p>
             <p>Best regards,<br>Conestoga Virtual Game Store</p>";
             var emailService = new EmailService();
             await emailService.SendEmailAsync(email, subject, body);
         }
-
 
         public async Task<IActionResult> ValidateEmail(string userId, string token)
         {

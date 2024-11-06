@@ -9,6 +9,10 @@ namespace CVGS.Controllers
 {
     public class AdminController : Controller
     {
-
+        [Authorize(Policy = "Admin")]
+        public IActionResult Panel()
+        {
+            return View();
+        }
     }
 }

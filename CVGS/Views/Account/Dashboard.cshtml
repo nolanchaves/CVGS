@@ -75,7 +75,6 @@ else
                 <div class="card-body">
                     <div>
                         <ul style="list-style-type: none;">
-                            <li><strong>Full Name:</strong> @(Model.Address != null ? Model.Address.FullName : "N/A")</li>
                             <li><strong>Phone Number:</strong> @(Model.Address != null ? Model.Address.PhoneNumber : "N/A")</li>
                             <li><strong>Street Address:</strong> @(Model.Address != null ? Model.Address.StreetAddress : "N/A")</li>
                             <li><strong>Apt/Suite:</strong> @(Model.Address != null && !string.IsNullOrEmpty(Model.Address.AptSuite) ? Model.Address.AptSuite : "N/A")</li>
@@ -101,7 +100,6 @@ else
                     <div class="card-body">
                         <div>
                             <ul style="list-style-type: none;">
-                                <li><strong>Full Name:</strong> @(Model.Address != null ? Model.Address.ShippingFullName : "N/A")</li>
                                 <li><strong>Phone Number:</strong> @(Model.Address != null ? Model.Address.ShippingPhoneNumber : "N/A")</li>
                                 <li><strong>Street Address:</strong> @(Model.Address != null ? Model.Address.ShippingStreetAddress : "N/A")</li>
                                 <li><strong>Apt/Suite:</strong> @(Model.Address != null && !string.IsNullOrEmpty(Model.Address.ShippingAptSuite) ? Model.Address.ShippingAptSuite : "N/A")</li>
