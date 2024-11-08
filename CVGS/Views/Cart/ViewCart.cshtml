@@ -1,0 +1,83 @@
+﻿@model CVGS.Entities.Cart
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title text-center">Shopping Cart</h2>
+    </div>
+    @if (Model != null && Model.CartItems.Any())
+    {
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Game</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.CartItems)
+                    {
+                        <tr>
+                            <td>
+                                <img src="@item.Game.CoverImageURL" alt="@item.Game.Title" style="width:50px; height:auto;" />
+                            </td>
+                            <td class="pt-6">@item.Game.Title</td>
+                            <td class="pt-6">@item.Game.Price.ToString("C")</td>
+                            <td class="pt-6">@item.Quantity</td>
+                            <td class="pt-6">@((item.Quantity * item.Game.Price).ToString("C"))</td>
+                            <td class="pt-6">
+                                <form asp-controller="Cart" asp-action="RemoveFromCart" method="post">
+                                    <input type="hidden" name="gameId" value="@item.GameId" />
+                                    <button type="submit" class="btn btn-danger">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="text-end fw-bold">Subtotal:</td>
+                        <td colspan="2" class="fw-bold">
+                            @ViewBag.TotalBeforeTax.ToString("C")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="text-end fw-bold">Tax for @Model.User?.Address?.Province:</td>
+                        <td colspan="2" class="fw-bold">
+                            @ViewBag.TaxAmount.ToString("C")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="text-end fw-bold">Total:</td>
+                        <td colspan="2" class="fw-bold">
+                            @ViewBag.TotalAfterTax.ToString("C")
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <br />
+            <div class="d-flex justify-content-center gap-2 mt-2">
+                <form asp-controller="Cart" asp-action="ClearCart" method="post">
+                    <button type="submit" class="btn btn-danger">Empty Cart</button>
+                </form>
+                <form asp-controller="Cart" asp-action="CheckoutCart" method="post">
+                    <button type="submit" class="btn btn-success">Proceed to Checkout</button>
+                </form>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card-body">
+            <h5 class="text-center">Your cart is empty</h5>
+        </div>
+    }
+</div>

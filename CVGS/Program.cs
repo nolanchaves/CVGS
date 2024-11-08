@@ -6,7 +6,6 @@ using NETCore.MailKit.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 // Configure the database context

@@ -36,6 +36,18 @@ namespace CVGS
                 .WithOne(s => s.User)
                 .HasForeignKey<ShippingAddress>(s => s.UserId);
 
+            builder.Entity<CartItem>()
+                .HasOne(ci => ci.Cart)
+                .WithMany(c => c.CartItems)
+                .HasForeignKey(ci => ci.CartId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Cart>()
+                .HasOne(c => c.User)
+                .WithMany()
+                .HasForeignKey(c => c.UserID)
+                .OnDelete(DeleteBehavior.Cascade);
+
             builder.Entity<Game>().HasData(
             // PC Games
             new Game { GameID = 1, Title = "Minecraft", Description = "A sandbox game with endless possibilities.", Platform = "PC", Category = "Sandbox", LanguageSupport = "English, Spanish", Price = 26.95m, Rating = 9.1f, CoverImageURL = "/images/minecraft.jpg", DownloadSize = 1500000000 },
@@ -86,6 +98,7 @@ namespace CVGS
         public DbSet<Address> Addresses { get; set; }
         public DbSet<ShippingAddress> ShippingAddresses { get; set; }
         public DbSet<Game> Games { get; set; }
-
+        public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<Cart> Carts { get; set; }
     }
 }

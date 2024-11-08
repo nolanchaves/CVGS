@@ -4,6 +4,7 @@ using CVGS;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CVGS.Migrations
 {
     [DbContext(typeof(CvgsDbContext))]
-    partial class CvgsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241107230524_CartItemUpdate")]
+    partial class CartItemUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -143,26 +146,32 @@ namespace CVGS.Migrations
 
             modelBuilder.Entity("CVGS.Entities.CartItem", b =>
                 {
-                    b.Property<int>("CartItemId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartItemId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CartId")
                         .HasColumnType("int");
 
-                    b.Property<int>("GameId")
+                    b.Property<int?>("GameID")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("CartItemId");
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("CartId");
 
-                    b.HasIndex("GameId");
+                    b.HasIndex("GameID");
 
                     b.ToTable("CartItems");
                 });
@@ -935,9 +944,7 @@ namespace CVGS.Migrations
 
                     b.HasOne("CVGS.Entities.Game", "Game")
                         .WithMany()
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GameID");
 
                     b.Navigation("Cart");
 
