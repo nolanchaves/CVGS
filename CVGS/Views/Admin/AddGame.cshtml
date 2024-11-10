@@ -1,0 +1,64 @@
+﻿@model CVGS.Models.GameViewModel
+
+@{
+    ViewData["Title"] = "Add Game";
+}
+<div class="card">
+    <div class="card-header">
+        <h1>Add Game</h1>
+    </div>
+    <div class="card-body">
+        <form asp-action="AddGame" method="post" enctype="multipart/form-data">
+            <div class="form-group mb-3">
+                <label asp-for="Title"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Description"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Platform"></label>
+                @Html.DropDownListFor(
+                         m => m.Platform,
+                         new SelectList(Model.PreferenceViewModel.AvailablePlatforms, "Platform"),
+                         "-- Select a Platform --",
+                         new { @class = "form-control" })
+                <span asp-validation-for="Platform" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Category"></label>
+                @Html.DropDownListFor(
+                         m => m.Category,
+                         new SelectList(Model.PreferenceViewModel.AvailableGameCategories, "Category"),
+                         "-- Select a Category --",
+                         new { @class = "form-control" })
+                <span asp-validation-for="Category" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="LanguageSupport"></label>
+                @Html.DropDownListFor(
+                         m => m.LanguageSupport,
+                         new SelectList(Model.PreferenceViewModel.AvailableLanguages, "Language"),
+                         "-- Select a Language --",
+                         new { @class = "form-control" })
+                <span asp-validation-for="LanguageSupport" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Price"></label>
+                    <input asp-for="Price" class="form-control" type="number" step="0.01" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+
+            <button type="submit" class="btn btn-primary">Add Game</button>
+            <a asp-controller="Admin" asp-action="Panel" class="btn btn-danger">Return to Panel</a>
+        </form>
+    </div>
+</div>

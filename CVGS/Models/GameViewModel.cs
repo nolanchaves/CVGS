@@ -14,6 +14,8 @@
         public long DownloadSize { get; set; }
         public List<ReviewDetailViewModel>? Reviews { get; set; }
         public ReviewDetailViewModel? UserReview {  get; set; }
+
+        public PreferenceViewModel? PreferenceViewModel { get; set; }
     }
 
 }
