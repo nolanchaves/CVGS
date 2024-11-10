@@ -35,9 +35,6 @@ namespace CVGS
                 .WithOne(s => s.User)
                 .HasForeignKey<ShippingAddress>(s => s.UserId);
             
-            //builder.Entity<User>()
-            //    .HasMany(u => u.Review)
-            //    .WithOne(s => s.User);
 
             builder.Entity<Game>().HasData(
             // PC Games
@@ -102,7 +99,7 @@ namespace CVGS
                     new Review() {
                         Id=5,
                         UserId= "6c9c58e6-5b8d-42c5-8cf9-1e7c7480f5d2",
-                        GameId = 6, Content = "Epic cyberpunky game", Rating = null,
+                        GameId = 6, Content = "Epic cyberpunky game", Rating = 3,
                         Approved = true
                     },
                     new Review()
@@ -129,8 +126,95 @@ namespace CVGS
                         UserId = "bac4f198-0003-438a-a347-2c27bc0e0ffa",
                         GameId = 26,
                         Content = "very open",
-                        Rating = null,
+                        Rating = 5,
                         Approved = true
+                    }
+                );
+            });
+
+            builder.Entity<Wishlist>(b =>
+            {
+                b.HasMany(w => w.User)
+                .WithMany(u => u.Wishlist);
+                
+                b.HasMany(w => w.Game)
+                .WithMany(g => g.Wishlist);
+
+                b.HasData(
+                    new Wishlist()
+                    {
+                        WishlistId = 1,
+                        UserId = "05e61254-11dc-44d9-89e7-0e574ce7099a",
+                        GameId = 1
+                    },new Wishlist()
+                    {
+                        WishlistId = 2,
+                        UserId = "05e61254-11dc-44d9-89e7-0e574ce7099a",
+                        GameId = 2
+                    },new Wishlist()
+                    {
+                        WishlistId = 3,
+                        UserId = "05e61254-11dc-44d9-89e7-0e574ce7099a",
+                        GameId = 11
+                    },new Wishlist()
+                    {
+                        WishlistId = 4,
+                        UserId = "05e61254-11dc-44d9-89e7-0e574ce7099a",
+                        GameId = 25
+                    },new Wishlist()
+                    {
+                        WishlistId = 5,
+                        UserId = "05e61254-11dc-44d9-89e7-0e574ce7099a",
+                        GameId = 6
+                    },
+
+                    new Wishlist()
+                    {
+                        WishlistId = 6,
+                        UserId = "6c9c58e6-5b8d-42c5-8cf9-1e7c7480f5d2",
+                        GameId = 3
+                    },new Wishlist()
+                    {
+                        WishlistId = 7,
+                        UserId = "6c9c58e6-5b8d-42c5-8cf9-1e7c7480f5d2",
+                        GameId = 4
+                    },new Wishlist()
+                    {
+                        WishlistId = 8,
+                        UserId = "6c9c58e6-5b8d-42c5-8cf9-1e7c7480f5d2",
+                        GameId = 28
+                    },new Wishlist()
+                    {
+                        WishlistId = 9,
+                        UserId = "6c9c58e6-5b8d-42c5-8cf9-1e7c7480f5d2",
+                        GameId = 13
+                    },new Wishlist()
+                    {
+                        WishlistId = 10,
+                        UserId = "6c9c58e6-5b8d-42c5-8cf9-1e7c7480f5d2",
+                        GameId = 30
+                    },
+                    
+                    new Wishlist()
+                    {
+                        WishlistId = 11,
+                        UserId = "042f95a1-3247-4e6a-a375-d2165a8bf16c",
+                        GameId = 30
+                    },new Wishlist()
+                    {
+                        WishlistId = 12,
+                        UserId = "042f95a1-3247-4e6a-a375-d2165a8bf16c",
+                        GameId = 23
+                    },new Wishlist()
+                    {
+                        WishlistId = 13,
+                        UserId = "042f95a1-3247-4e6a-a375-d2165a8bf16c",
+                        GameId = 20
+                    },new Wishlist()
+                    {
+                        WishlistId = 14,
+                        UserId = "042f95a1-3247-4e6a-a375-d2165a8bf16c",
+                        GameId = 1
                     }
                 );
             });
@@ -142,6 +226,7 @@ namespace CVGS
         public DbSet<ShippingAddress> ShippingAddresses { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<Review>Review {  get; set; }
+        public DbSet<Wishlist>Wishlist { get; set; }
 
     }
 }

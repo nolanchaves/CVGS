@@ -38,6 +38,8 @@
 
         [Range(0, long.MaxValue)]
         public long DownloadSize { get; set; }
+
+        public IEnumerable<Wishlist>? Wishlist { get; set; }
     }
 
 }

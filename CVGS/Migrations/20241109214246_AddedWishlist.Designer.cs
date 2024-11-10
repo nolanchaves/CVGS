@@ -4,6 +4,7 @@ using CVGS;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CVGS.Migrations
 {
     [DbContext(typeof(CvgsDbContext))]
-    partial class CvgsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241109214246_AddedWishlist")]
+    partial class AddedWishlist
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -804,9 +807,13 @@ namespace CVGS.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("WishlistId");
+
+                    b.HasIndex("GameId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Wishlist");
 
@@ -895,21 +902,6 @@ namespace CVGS.Migrations
                             GameId = 1,
                             UserId = "042f95a1-3247-4e6a-a375-d2165a8bf16c"
                         });
-                });
-
-            modelBuilder.Entity("GameWishlist", b =>
-                {
-                    b.Property<int>("GameID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WishlistId")
-                        .HasColumnType("int");
-
-                    b.HasKey("GameID", "WishlistId");
-
-                    b.HasIndex("WishlistId");
-
-                    b.ToTable("GameWishlist");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -1045,21 +1037,6 @@ namespace CVGS.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("UserWishlist", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("WishlistId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "WishlistId");
-
-                    b.HasIndex("WishlistId");
-
-                    b.ToTable("UserWishlist");
-                });
-
             modelBuilder.Entity("Address", b =>
                 {
                     b.HasOne("CVGS.Entities.ShippingAddress", "ShippingAddress")
@@ -1114,19 +1091,23 @@ namespace CVGS.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("GameWishlist", b =>
+            modelBuilder.Entity("CVGS.Entities.Wishlist", b =>
                 {
-                    b.HasOne("CVGS.Entities.Game", null)
+                    b.HasOne("CVGS.Entities.Game", "Game")
                         .WithMany()
-                        .HasForeignKey("GameID")
+                        .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CVGS.Entities.Wishlist", null)
+                    b.HasOne("CVGS.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("WishlistId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Game");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1176,21 +1157,6 @@ namespace CVGS.Migrations
                     b.HasOne("CVGS.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("UserWishlist", b =>
-                {
-                    b.HasOne("CVGS.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CVGS.Entities.Wishlist", null)
-                        .WithMany()
-                        .HasForeignKey("WishlistId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

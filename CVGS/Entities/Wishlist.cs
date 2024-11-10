@@ -11,11 +11,11 @@ namespace CVGS.Entities
         [Required]
         [ForeignKey("GameId")]
         public int GameId {  get; set; }
-        public Game? Game { get; set; }
+        public IEnumerable<Game>? Game { get; set; }
 
         [Required]
         [ForeignKey("UserId")]
         public string UserId {  get; set; }
-        public User? User { get; set; }
+        public IEnumerable<User>? User { get; set; }
     }
 }

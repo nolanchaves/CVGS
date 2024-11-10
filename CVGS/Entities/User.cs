@@ -31,5 +31,7 @@ namespace CVGS.Entities
 
         //[ForeignKey("ReviewId")]
         public IEnumerable<Review>? Review { get; set; }
+
+        public IEnumerable<Wishlist>? Wishlist { get; set; }
     }
 }

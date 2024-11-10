@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using CVGS;
 using CVGS.Entities;
 using NETCore.MailKit.Core;
+using CVGS.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +49,7 @@ builder.Services.AddSession(options =>
 });
 
 builder.Services.AddScoped<EmailService>();
+builder.Services.AddScoped<ReviewService>();
 
 var app = builder.Build();
 

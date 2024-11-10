@@ -1,9 +1,9 @@
 ﻿@model IEnumerable<GameViewModel>
 @{
-    ViewData["Title"] = "Game List";
+    ViewData["Title"] = "Wisht List";
 }
 
-<h1 class ="text-center">Game List</h1>
+<h1 class="text-center">Your Wishlist</h1>
 
 <div class="container">
     <div class="row">
@@ -21,9 +21,6 @@
                         <p class="card-text text-center"><strong>Platform:</strong> @game.Platform</p>
                         <div class="d-flex justify-content-center mt-auto">
                             <button class="btn btn-success">Add to Cart</button>
-                        </div>
-                        <div class="d-flex justify-content-center mt-2">
-                            <a asp-controller="Wishlist" asp-action="AddWishlist" asp-route-id="@game.GameID" class="btn btn-secondary">Add to Wishlist</a>
                         </div>
                     </div>
                 </div>
