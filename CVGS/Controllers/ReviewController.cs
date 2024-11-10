@@ -22,7 +22,7 @@ namespace CVGS.Controllers
         {
             if (!User.Identity.IsAuthenticated) return RedirectToAction("Login", "Account");
 
-            if(_context.Review.Any(r => r.UserId == _userManager.GetUserId(User) && r.GameId == id))
+            if(_context.Review.Any(r => r.UserId == _userManager.GetUserId(User) && r.GameId == id && r.Approved))
                 return RedirectToAction("GameDetails", "Games", new { id = id });
 
             ReviewRateViewModel rvm = new ReviewRateViewModel() { GameId = id};
@@ -38,7 +38,7 @@ namespace CVGS.Controllers
                 try
                 {
                     var userId = _userManager.GetUserId(User);
-                    var exists =await _context.Review.FirstOrDefaultAsync<Review>(r=>r.UserId==userId && r.GameId== model.GameId);
+                    var exists =await _context.Review.FirstOrDefaultAsync<Review>(r=>r.UserId==userId && r.GameId== model.GameId && r.Approved);
 
                     if (exists == null)
                     {

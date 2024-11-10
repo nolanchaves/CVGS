@@ -34,14 +34,14 @@
 <div class="container mt-5">
     <h2>Reviews</h2>
     <div class="row">
-        <div class="d-flex justify-content-start mt-2">
+        <div class="d-flex justify-content-start mt-2 mb-2">
             <a asp-controller="Review" asp-action="AddReview" asp-route-id="@Model.GameID" class="btn btn-secondary">Add Review</a>
         </div>
-        <br />
+        
         @if(Model.UserReview != null)
         {
             <div>
-                <div class="card" style="height: 100%;">
+                <div class="card mb-2" style="height: 100%;">
 
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">@Model.UserReview.DisplayName</h5>
