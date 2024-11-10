@@ -22,6 +22,9 @@
                         <div class="d-flex justify-content-center mt-auto">
                             <button class="btn btn-success">Add to Cart</button>
                         </div>
+                        <div class="d-flex justify-content-center mt-auto">
+                            <a asp-controller="Wishlist" asp-action="RemoveWishlist" asp-route-id="@game.GameID" class="btn btn-secondary">Remove</a>
+                        </div>
                     </div>
                 </div>
             </div>

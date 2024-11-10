@@ -20,7 +20,7 @@ namespace CVGS.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("ViewAllWishlist");
         }
 
         [HttpGet]
@@ -53,27 +53,29 @@ namespace CVGS.Controllers
 
                 return View(games);
             }
-            catch (Exception ex) { 
-            
+            catch (Exception ex) {
+                return StatusCode(500, "An error occurred while processing your request.");
             }
-
-            return View("Index");
         }
 
-        [HttpPost]
-        public IActionResult DeleteWishlist(int gameId)
+        public IActionResult RemoveWishlist(int id)
         {
             try
             {
                 if (!User.Identity.IsAuthenticated) return RedirectToAction("Login", "Account");
                 var _userId = _userManager.GetUserId(User);
 
-                Wishlist wishlist = _context.Wishlist.Where(r => r.UserId == _userId && r.GameId==gameId).FirstOrDefault();
+                Wishlist wishlist = _context.Wishlist.Where(r => r.UserId == _userId && r.GameId==id).FirstOrDefault();
+
+                if (wishlist == null) {
+                    return RedirectToAction("ViewAllWishlist");
+                }
+
                 _context.Wishlist.Remove(wishlist);
 
                 _context.SaveChanges();
 
-                return View("Index");
+                return RedirectToAction("ViewAllWishlist");
             }
             catch (Exception ex)
             {
