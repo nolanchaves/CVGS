@@ -34,7 +34,18 @@ namespace CVGS
                 .HasOne(u => u.ShippingAddress)
                 .WithOne(s => s.User)
                 .HasForeignKey<ShippingAddress>(s => s.UserId);
-            
+
+            builder.Entity<CartItem>()
+                .HasOne(ci => ci.Cart)
+                .WithMany(c => c.CartItems)
+                .HasForeignKey(ci => ci.CartId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Cart>()
+                .HasOne(c => c.User)
+                .WithMany()
+                .HasForeignKey(c => c.UserID)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Game>().HasData(
             // PC Games
@@ -225,8 +236,10 @@ namespace CVGS
         public DbSet<Address> Addresses { get; set; }
         public DbSet<ShippingAddress> ShippingAddresses { get; set; }
         public DbSet<Game> Games { get; set; }
-        public DbSet<Review>Review {  get; set; }
-        public DbSet<Wishlist>Wishlist { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<Review> Review { get; set; }
+        public DbSet<Wishlist> Wishlist { get; set; }
 
     }
 }

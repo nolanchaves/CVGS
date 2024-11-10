@@ -4,6 +4,7 @@ using CVGS;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CVGS.Migrations
 {
     [DbContext(typeof(CvgsDbContext))]
-    partial class CvgsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241107225142_CreateCart")]
+    partial class CreateCart
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,6 +123,63 @@ namespace CVGS.Migrations
                         .IsUnique();
 
                     b.ToTable("Preferences");
+                });
+
+            modelBuilder.Entity("CVGS.Entities.Cart", b =>
+                {
+                    b.Property<int>("CartID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartID"));
+
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("CartID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("Carts");
+                });
+
+            modelBuilder.Entity("CVGS.Entities.CartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CartId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CoverImageURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CartId");
+
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("CVGS.Entities.Game", b =>
@@ -566,123 +626,6 @@ namespace CVGS.Migrations
                         });
                 });
 
-            modelBuilder.Entity("CVGS.Entities.Preference", b =>
-                {
-                    b.Property<int>("PreferenceId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PreferenceId"));
-
-                    b.Property<string>("AvailablePlatforms")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FavouriteGameCategories")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FavouritePlatforms")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LanguagePreferences")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("PreferenceId");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Preferences");
-                });
-
-            modelBuilder.Entity("CVGS.Entities.Review", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("Approved")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Content")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<int>("GameId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GameId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Review");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Approved = true,
-                            Content = "Black  jack",
-                            GameId = 1,
-                            Rating = 1,
-                            UserId = "05e61254-11dc-44d9-89e7-0e574ce7099a"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Approved = true,
-                            Content = "Epic cyberpunky game",
-                            GameId = 6,
-                            Rating = 3,
-                            UserId = "6c9c58e6-5b8d-42c5-8cf9-1e7c7480f5d2"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Approved = false,
-                            Content = "sui",
-                            GameId = 11,
-                            Rating = 5,
-                            UserId = "042f95a1-3247-4e6a-a375-d2165a8bf16c"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Approved = true,
-                            Content = "john uncharted",
-                            GameId = 21,
-                            Rating = 3,
-                            UserId = "88193658-5295-478b-9f7e-534f739a06bc"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Approved = true,
-                            Content = "very open",
-                            GameId = 26,
-                            Rating = 5,
-                            UserId = "bac4f198-0003-438a-a347-2c27bc0e0ffa"
-                        });
-                });
-
             modelBuilder.Entity("CVGS.Entities.ShippingAddress", b =>
                 {
                     b.Property<int>("ShippingAddressId")
@@ -827,127 +770,6 @@ namespace CVGS.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("CVGS.Entities.Wishlist", b =>
-                {
-                    b.Property<int>("WishlistId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WishlistId"));
-
-                    b.Property<int>("GameId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("WishlistId");
-
-                    b.ToTable("Wishlist");
-
-                    b.HasData(
-                        new
-                        {
-                            WishlistId = 1,
-                            GameId = 1,
-                            UserId = "05e61254-11dc-44d9-89e7-0e574ce7099a"
-                        },
-                        new
-                        {
-                            WishlistId = 2,
-                            GameId = 2,
-                            UserId = "05e61254-11dc-44d9-89e7-0e574ce7099a"
-                        },
-                        new
-                        {
-                            WishlistId = 3,
-                            GameId = 11,
-                            UserId = "05e61254-11dc-44d9-89e7-0e574ce7099a"
-                        },
-                        new
-                        {
-                            WishlistId = 4,
-                            GameId = 25,
-                            UserId = "05e61254-11dc-44d9-89e7-0e574ce7099a"
-                        },
-                        new
-                        {
-                            WishlistId = 5,
-                            GameId = 6,
-                            UserId = "05e61254-11dc-44d9-89e7-0e574ce7099a"
-                        },
-                        new
-                        {
-                            WishlistId = 6,
-                            GameId = 3,
-                            UserId = "6c9c58e6-5b8d-42c5-8cf9-1e7c7480f5d2"
-                        },
-                        new
-                        {
-                            WishlistId = 7,
-                            GameId = 4,
-                            UserId = "6c9c58e6-5b8d-42c5-8cf9-1e7c7480f5d2"
-                        },
-                        new
-                        {
-                            WishlistId = 8,
-                            GameId = 28,
-                            UserId = "6c9c58e6-5b8d-42c5-8cf9-1e7c7480f5d2"
-                        },
-                        new
-                        {
-                            WishlistId = 9,
-                            GameId = 13,
-                            UserId = "6c9c58e6-5b8d-42c5-8cf9-1e7c7480f5d2"
-                        },
-                        new
-                        {
-                            WishlistId = 10,
-                            GameId = 30,
-                            UserId = "6c9c58e6-5b8d-42c5-8cf9-1e7c7480f5d2"
-                        },
-                        new
-                        {
-                            WishlistId = 11,
-                            GameId = 30,
-                            UserId = "042f95a1-3247-4e6a-a375-d2165a8bf16c"
-                        },
-                        new
-                        {
-                            WishlistId = 12,
-                            GameId = 23,
-                            UserId = "042f95a1-3247-4e6a-a375-d2165a8bf16c"
-                        },
-                        new
-                        {
-                            WishlistId = 13,
-                            GameId = 20,
-                            UserId = "042f95a1-3247-4e6a-a375-d2165a8bf16c"
-                        },
-                        new
-                        {
-                            WishlistId = 14,
-                            GameId = 1,
-                            UserId = "042f95a1-3247-4e6a-a375-d2165a8bf16c"
-                        });
-                });
-
-            modelBuilder.Entity("GameWishlist", b =>
-                {
-                    b.Property<int>("GameID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WishlistId")
-                        .HasColumnType("int");
-
-                    b.HasKey("GameID", "WishlistId");
-
-                    b.HasIndex("WishlistId");
-
-                    b.ToTable("GameWishlist");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -1081,21 +903,6 @@ namespace CVGS.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("UserWishlist", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("WishlistId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "WishlistId");
-
-                    b.HasIndex("WishlistId");
-
-                    b.ToTable("UserWishlist");
-                });
-
             modelBuilder.Entity("Address", b =>
                 {
                     b.HasOne("CVGS.Entities.ShippingAddress", "ShippingAddress")
@@ -1111,32 +918,13 @@ namespace CVGS.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CVGS.Entities.Preference", b =>
+            modelBuilder.Entity("CVGS.Entities.CVGS.Entities.Preference", b =>
                 {
                     b.HasOne("CVGS.Entities.User", "User")
                         .WithOne("Preferences")
-                        .HasForeignKey("CVGS.Entities.Preference", "UserId")
+                        .HasForeignKey("CVGS.Entities.CVGS.Entities.Preference", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("CVGS.Entities.Review", b =>
-                {
-                    b.HasOne("CVGS.Entities.Game", "Game")
-                        .WithMany("Review")
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CVGS.Entities.User", "User")
-                        .WithMany("Review")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Game");
 
                     b.Navigation("User");
                 });
@@ -1160,15 +948,7 @@ namespace CVGS.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CVGS.Entities.Game", "Game")
-                        .WithMany()
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Cart");
-
-                    b.Navigation("Game");
                 });
 
             modelBuilder.Entity("CVGS.Entities.ShippingAddress", b =>
@@ -1178,21 +958,6 @@ namespace CVGS.Migrations
                         .HasForeignKey("CVGS.Entities.ShippingAddress", "UserId");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("GameWishlist", b =>
-                {
-                    b.HasOne("CVGS.Entities.Game", null)
-                        .WithMany()
-                        .HasForeignKey("GameID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CVGS.Entities.Wishlist", null)
-                        .WithMany()
-                        .HasForeignKey("WishlistId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1246,37 +1011,16 @@ namespace CVGS.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("UserWishlist", b =>
-                {
-                    b.HasOne("CVGS.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CVGS.Entities.Wishlist", null)
-                        .WithMany()
-                        .HasForeignKey("WishlistId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("CVGS.Entities.Cart", b =>
                 {
                     b.Navigation("CartItems");
                 });
 
-            modelBuilder.Entity("CVGS.Entities.Game", b =>
-                {
-                    b.Navigation("Review");
-                });
             modelBuilder.Entity("CVGS.Entities.User", b =>
                 {
                     b.Navigation("Address");
 
                     b.Navigation("Preferences");
-
-                    b.Navigation("Review");
 
                     b.Navigation("ShippingAddress");
                 });
