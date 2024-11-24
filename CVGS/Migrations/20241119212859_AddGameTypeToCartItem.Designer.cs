@@ -4,6 +4,7 @@ using CVGS;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CVGS.Migrations
 {
     [DbContext(typeof(CvgsDbContext))]
-    partial class CvgsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241119212859_AddGameTypeToCartItem")]
+    partial class AddGameTypeToCartItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -118,10 +121,6 @@ namespace CVGS.Migrations
 
                     b.Property<int>("GameId")
                         .HasColumnType("int");
-
-                    b.Property<string>("GameType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -547,71 +546,6 @@ namespace CVGS.Migrations
                             Price = 59.99m,
                             Title = "Splatoon 3"
                         });
-                });
-
-            modelBuilder.Entity("CVGS.Entities.Order", b =>
-                {
-                    b.Property<int>("OrderId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
-
-                    b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PaymentMethod")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ShippingAddressId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("OrderId");
-
-                    b.HasIndex("ShippingAddressId");
-
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("CVGS.Entities.OrderDetail", b =>
-                {
-                    b.Property<int>("OrderDetailId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderDetailId"));
-
-                    b.Property<int>("GameId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("GameType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrderDetailId");
-
-                    b.HasIndex("GameId");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("CVGS.Entities.Preference", b =>
@@ -1189,34 +1123,6 @@ namespace CVGS.Migrations
                     b.Navigation("Game");
                 });
 
-            modelBuilder.Entity("CVGS.Entities.Order", b =>
-                {
-                    b.HasOne("CVGS.Entities.ShippingAddress", "ShippingAddress")
-                        .WithMany()
-                        .HasForeignKey("ShippingAddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ShippingAddress");
-                });
-
-            modelBuilder.Entity("CVGS.Entities.OrderDetail", b =>
-                {
-                    b.HasOne("CVGS.Entities.Game", "Game")
-                        .WithMany()
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CVGS.Entities.Order", null)
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Game");
-                });
-
             modelBuilder.Entity("CVGS.Entities.Preference", b =>
                 {
                     b.HasOne("CVGS.Entities.User", "User")
@@ -1345,11 +1251,6 @@ namespace CVGS.Migrations
             modelBuilder.Entity("CVGS.Entities.Game", b =>
                 {
                     b.Navigation("Review");
-                });
-
-            modelBuilder.Entity("CVGS.Entities.Order", b =>
-                {
-                    b.Navigation("OrderDetails");
                 });
 
             modelBuilder.Entity("CVGS.Entities.User", b =>

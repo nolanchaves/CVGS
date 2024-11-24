@@ -59,22 +59,19 @@
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Events">Events</a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="Games" asp-action="AllGames">Games</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Wishlist" asp-action="ViewAllWishlist">Wish List</a>
+                                <a class="nav-link text-dark" asp-controller="Events" asp-action="EventsList">Events</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Friends" asp-action="FriendsList">Friends List</a>
+                                <a class="nav-link text-dark" asp-controller="Order" asp-action="OrderList">Orders</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                                <a class="nav-link text-dark" asp-controller="Wishlist" asp-action="ViewAllWishlist">Wish List</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Friends" asp-action="FriendsList">Friends List</a>
                             </li>
                         </ul>
                         @if (User.Identity.IsAuthenticated)
@@ -120,6 +117,12 @@
             {
                 <div class="alert alert-warning" role="alert">
                     @TempData["Message"]
+                </div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-warning" role="alert">
+                    @TempData["ErrorMessage"]
                 </div>
             }
             @RenderBody()

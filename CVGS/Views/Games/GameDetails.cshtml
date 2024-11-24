@@ -18,65 +18,57 @@
             <p><strong>Price:</strong> @Model.Price.ToString("C")</p>
             <p><strong>Rating:</strong> @Model.Rating</p>
             <p><strong>Download Size:</strong> @(Model.DownloadSize / (1024 * 1024)) MB</p>
+            
+            <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                <input type="hidden" name="gameId" value="@Model.GameID" />
 
-            <div class="d-flex justify-content-start mt-2">
-                <form asp-controller="Cart" asp-action="AddToCart" method="post">
-                    <input type="hidden" name="gameId" value="@Model.GameID" />
-                    <button type="submit" class="btn btn-success me-2">Add to Cart</button>
-                </form>
-            </div>
-            <div class="d-flex justify-content-start mt-2">
-                <a asp-controller="Wishlist" asp-action="AddWishlist" asp-route-id="@Model.GameID" class="btn btn-primary">Add to Wishlist</a>
-            </div>
-            <div class="d-flex justify-content-start mt-2">
-                <a asp-controller="Games" asp-action="AllGames" class="btn btn-danger">Back to All Games</a>
-            </div>
+                <div class="mb-3">
+                    <label for="purchaseType" class="form-label"><strong>Purchase Type:</strong></label>
+                    <select id="purchaseType" name="gameType" class="form-select" required>
+                        <option value="" disabled selected>Choose game type</option>
+                        <option value="Physical">Physical</option>
+                        <option value="Digital">Digital</option>
+                    </select>
+                </div>
+
+                <div class="d-flex justify-content-start gap-2 mt-2">
+                    <button type="submit" class="btn btn-success">Add to Cart</button>
+                    <a asp-controller="Wishlist" asp-action="AddWishlist" asp-route-id="@Model.GameID" class="btn btn-primary">Add to Wishlist</a>
+                    <a asp-controller="Games" asp-action="AllGames" class="btn btn-danger">Back to All Games</a>
+                </div>
+            </form>
+
         </div>
     </div>
 </div>
-<div class="container mt-5">
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h2 class="mb-0">Reviews</h2>
-            <div class="d-flex ms-auto">
-                <a asp-controller="Review" asp-action="AddReview" asp-route-id="@Model.GameID" class="btn btn-outline-success">Add Review</a>
-            </div>
+<div class="card mt-5 mb-2">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">Reviews</h2>
+        <div class="d-flex ms-auto">
+            <a asp-controller="Review" asp-action="AddReview" asp-route-id="@Model.GameID" class="btn btn-outline-success">Add Review</a>
         </div>
-
-        <div class="card-body">
-
-            <!-- User's Review -->
-            @if (Model.UserReview != null)
+    </div>
+    <div class="card-body">
+        @if (Model.Reviews != null && Model.Reviews.Any())
+        {
+            foreach (var review in Model.Reviews)
             {
                 <div class="card mb-2">
                     <div class="card-header">
-                        <h5>@Model.UserReview.DisplayName</h5>
+                        <h5>@review.DisplayName</h5>
                     </div>
                     <div class="card-body">
-                        <p class="card-text"><strong>Rate:</strong> @Model.UserReview.Rating</p>
-                        <p class="card-text">@Model.UserReview.ReviewContent</p>
+                        <p class="card-text"><strong>Rating:</strong> @review.Rating</p>
+                        <p class="card-text"><strong>Review:</strong> @review.ReviewContent</p>
                     </div>
                 </div>
             }
-
-            <!-- All Reviews -->
-            @if (Model.Reviews != null)
-            {
-                @foreach (var review in Model.Reviews)
-                {
-                    <div class="card mb-2">
-                        <div class="card-header">
-                            <h5>@review.DisplayName</h5>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text"><strong>Rate:</strong> @review.Rating</p>
-                            <p class="card-text">@review.ReviewContent</p>
-                        </div>
-                    </div>
-                }
-            }
-        </div>
+        }
+        else
+        {
+            <div class="alert alert-info" role="alert">
+                No reviews available for this game.
+            </div>
+        }
     </div>
 </div>
-
-

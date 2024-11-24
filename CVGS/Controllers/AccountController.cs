@@ -302,7 +302,7 @@ namespace CVGS.Controllers
             {
                 ActualName = user.FullName ?? "",
                 Gender = user.Gender ?? "",
-                BirthDate = user.BirthDate != null ? (DateOnly)user.BirthDate : DateOnly.MinValue,
+                BirthDate = user.BirthDate != null ? (DateOnly)user.BirthDate : DateOnly.FromDateTime(DateTime.Now),
                 ReceivePromotionalEmails = user.ReceivePromotionalEmails ?? false,
                 FavouritePlatforms = user.Preferences?.FavouritePlatforms ?? new List<string>(),
                 FavouriteGameCategories = user.Preferences?.FavouriteGameCategories ?? new List<string>(),

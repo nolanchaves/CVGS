@@ -35,7 +35,7 @@ namespace CVGS.Models
             {
                 if (value is DateOnly birthDate)
                 {
-                    if (birthDate > DateOnly.FromDateTime(DateTime.Now))
+                    if (birthDate >= DateOnly.FromDateTime(DateTime.Now))
                     {
                         return new ValidationResult("Birth date cannot be a future date.");
                     }

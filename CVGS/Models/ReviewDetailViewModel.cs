@@ -5,5 +5,6 @@
         public string DisplayName {  get; set; }
         public string ReviewContent { get; set; }
         public int Rating { get; set; }
+        public bool Approved { get; set; }
     }
 }

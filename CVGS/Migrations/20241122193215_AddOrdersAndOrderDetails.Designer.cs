@@ -4,6 +4,7 @@ using CVGS;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CVGS.Migrations
 {
     [DbContext(typeof(CvgsDbContext))]
-    partial class CvgsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241122193215_AddOrdersAndOrderDetails")]
+    partial class AddOrdersAndOrderDetails
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -592,10 +595,6 @@ namespace CVGS.Migrations
                     b.Property<int>("GameId")
                         .HasColumnType("int");
 
-                    b.Property<string>("GameType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
@@ -606,8 +605,6 @@ namespace CVGS.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("OrderDetailId");
-
-                    b.HasIndex("GameId");
 
                     b.HasIndex("OrderId");
 
@@ -1202,19 +1199,11 @@ namespace CVGS.Migrations
 
             modelBuilder.Entity("CVGS.Entities.OrderDetail", b =>
                 {
-                    b.HasOne("CVGS.Entities.Game", "Game")
-                        .WithMany()
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("CVGS.Entities.Order", null)
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Game");
                 });
 
             modelBuilder.Entity("CVGS.Entities.Preference", b =>

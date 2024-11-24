@@ -13,10 +13,13 @@ namespace CVGS.Controllers
 
         CvgsDbContext _context;
         UserManager<User> _userManager;
-        public WishlistController(CvgsDbContext context, UserManager<User> userManager)
+        CartController _cartController;
+
+        public WishlistController(CvgsDbContext context, UserManager<User> userManager, CartController cartController)
         {
             _context = context;
             _userManager = userManager;
+            _cartController = cartController;
         }
         public IActionResult Index()
         {
@@ -65,9 +68,10 @@ namespace CVGS.Controllers
                 if (!User.Identity.IsAuthenticated) return RedirectToAction("Login", "Account");
                 var _userId = _userManager.GetUserId(User);
 
-                Wishlist wishlist = _context.Wishlist.Where(r => r.UserId == _userId && r.GameId==id).FirstOrDefault();
+                Wishlist wishlist = _context.Wishlist.Where(r => r.UserId == _userId && r.GameId == id).FirstOrDefault();
 
-                if (wishlist == null) {
+                if (wishlist == null)
+                {
                     return RedirectToAction("ViewAllWishlist");
                 }
 
@@ -108,8 +112,9 @@ namespace CVGS.Controllers
                 {
                     Debug.WriteLine("Wishlist exists");
                 }
-
-                return RedirectToAction("GameDetails","Games",new { id = id });
+                var game = _context.Games.FirstOrDefault(g => g.GameID == exists.GameId);
+                TempData["SuccessMessage"] = $"{game.Title} has been added to your Wishlist.";
+                return RedirectToAction("AllGames", "Games");
 
             }
             catch (Exception ex)

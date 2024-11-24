@@ -3,6 +3,7 @@ using CVGS.Models;
 using CVGS.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CVGS.Controllers
 {
@@ -19,17 +20,27 @@ namespace CVGS.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult AllGames()
+        public IActionResult AllGames(string searchQuery)
         {
-            var games = _context.Games
+            var gamesQuery = _context.Games.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                gamesQuery = gamesQuery.Where(g => g.Title.Contains(searchQuery));
+            }
+
+            var games = gamesQuery
                 .Select(g => new GameViewModel
                 {
                     GameID = g.GameID,
                     Title = g.Title,
                     Platform = g.Platform,
                     Price = g.Price,
-                    CoverImageURL = g.CoverImageURL,
-                }).ToList();
+                    CoverImageURL = g.CoverImageURL
+                })
+                .ToList();
+
+            ViewBag.SearchQuery = searchQuery;
 
             return View(games);
         }
@@ -47,44 +58,43 @@ namespace CVGS.Controllers
                     Category = g.Category,
                     LanguageSupport = g.LanguageSupport,
                     Price = g.Price,
-                    Rating = (float)g.Rating,
+                    Rating = (float)(g.Review.Any() ? g.Review.Average(r => r.Rating) : 0),
                     CoverImageURL = g.CoverImageURL,
                     DownloadSize = g.DownloadSize,
                     Reviews = new List<ReviewDetailViewModel>()
                 })
                 .FirstOrDefault();
 
-
             if (game == null)
             {
                 return NotFound();
             }
-            else
+
+            var reviews = _reviewService.GetReviewForGame(_context, id, 0, 10)
+                .Where(r => r.Approved) 
+                .ToList();
+
+            foreach (var review in reviews)
             {
-                var reviews = _reviewService.GetReviewForGame(_context, id, 0, 10);
+                if (string.IsNullOrEmpty(review.Content)) continue;
 
-                foreach (var review in reviews)
+                var user = _context.Users.FirstOrDefault(u => u.Id == review.UserId);
+                if (user == null) continue;
+
+                var reviewDetail = new ReviewDetailViewModel()
                 {
-                    if (review.Content == null) continue;
+                    DisplayName = user.UserName, 
+                    Rating = review.Rating,
+                    ReviewContent = review.Content
+                };
 
-                    if (review.UserId == _userManager.GetUserId(User))
-                    {
-                        game.UserReview = new ReviewDetailViewModel()
-                        {
-                            DisplayName = _context.Users.Where(u => u.Id == review.UserId).FirstOrDefault().ToString(),
-                            Rating = review.Rating,
-                            ReviewContent = review.Content
-                        };
-                    }
-                    else
-                    {
-                        game.Reviews.Add(new ReviewDetailViewModel()
-                        {
-                            DisplayName = _context.Users.Where(u => u.Id == review.UserId).FirstOrDefault().ToString(),
-                            Rating = review.Rating,
-                            ReviewContent = review.Content
-                        });
-                    }
+                if (review.UserId == _userManager.GetUserId(User))
+                {
+                    game.UserReview = reviewDetail;
+                }
+                else
+                {
+                    game.Reviews.Add(reviewDetail);
                 }
             }
 

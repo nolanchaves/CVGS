@@ -15,6 +15,7 @@
                     <tr>
                         <th></th>
                         <th>Game</th>
+                        <th>Game Type</th>
                         <th>Price</th>
                         <th>Quantity</th>
                         <th>Total</th>
@@ -29,6 +30,7 @@
                                 <img src="@item.Game.CoverImageURL" alt="@item.Game.Title" style="width:50px; height:auto;" />
                             </td>
                             <td class="pt-6">@item.Game.Title</td>
+                            <td class="pt-6">@item.GameType</td>
                             <td class="pt-6">@item.Game.Price.ToString("C")</td>
                             <td class="pt-6">@item.Quantity</td>
                             <td class="pt-6">@((item.Quantity * item.Game.Price).ToString("C"))</td>
@@ -68,7 +70,7 @@
                 <form asp-controller="Cart" asp-action="ClearCart" method="post">
                     <button type="submit" class="btn btn-danger">Empty Cart</button>
                 </form>
-                <form asp-controller="Cart" asp-action="CheckoutCart" method="post">
+                <form asp-controller="Cart" asp-action="Checkout" method="post">
                     <button type="submit" class="btn btn-success">Proceed to Checkout</button>
                 </form>
             </div>

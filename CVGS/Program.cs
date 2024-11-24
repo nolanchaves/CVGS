@@ -4,10 +4,14 @@ using CVGS;
 using CVGS.Entities;
 using NETCore.MailKit.Core;
 using CVGS.Service;
+using CVGS.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<CartController>();
+
 
 // Configure the database context
 builder.Services.AddDbContext<CvgsDbContext>(options =>

@@ -30,7 +30,7 @@
         public decimal Price { get; set; }
 
         [Range(0, 10)]
-        public double Rating { get; set; }
+        public double? Rating { get; set; }
         public IEnumerable<Review>? Review { get; set; }
 
         [StringLength(500)]
