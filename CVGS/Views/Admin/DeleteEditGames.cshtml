@@ -1,0 +1,43 @@
+﻿@model IEnumerable<CVGS.Entities.Game>
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h2 class="mb-0">All Games</h2>
+            <a asp-controller="Admin" asp-action="Panel" class="btn btn-danger ms-auto">Return to Panel</a>
+        </div>
+
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Game</th>
+                        <th>Platform</th>
+                        <th>Category</th>
+                        <th>Language</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var game in Model)
+                    {
+                        <tr>
+                            <td>@game.Title</td>
+                            <td>@game.Platform</td>
+                            <td>@game.Category</td>
+                            <td>@game.LanguageSupport</td>
+                            <td>
+                                <form asp-action="EditGame" asp-route-id="@game.GameID" method="get" class="d-inline-block mr-2">
+                                    <button type="submit" class="btn btn-primary btn-sm">Edit</button>
+                                </form>
+                                <form asp-action="DeleteGame" asp-route-id="@game.GameID" method="post" onsubmit="return confirm('Are you sure you want to delete this game?');" class="d-inline-block">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

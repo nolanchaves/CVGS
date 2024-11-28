@@ -61,7 +61,8 @@ namespace CVGS.Controllers
                     Rating = (float)(g.Review.Any() ? g.Review.Average(r => r.Rating) : 0),
                     CoverImageURL = g.CoverImageURL,
                     DownloadSize = g.DownloadSize,
-                    Reviews = new List<ReviewDetailViewModel>()
+                    Reviews = new List<ReviewDetailViewModel>(),
+                    UserReview = null
                 })
                 .FirstOrDefault();
 
@@ -71,19 +72,17 @@ namespace CVGS.Controllers
             }
 
             var reviews = _reviewService.GetReviewForGame(_context, id, 0, 10)
-                .Where(r => r.Approved) 
+                .Where(r => r.Approved) // Only fetch approved reviews
                 .ToList();
 
             foreach (var review in reviews)
             {
-                if (string.IsNullOrEmpty(review.Content)) continue;
 
                 var user = _context.Users.FirstOrDefault(u => u.Id == review.UserId);
-                if (user == null) continue;
 
                 var reviewDetail = new ReviewDetailViewModel()
                 {
-                    DisplayName = user.UserName, 
+                    DisplayName = user.UserName,
                     Rating = review.Rating,
                     ReviewContent = review.Content
                 };
@@ -92,13 +91,12 @@ namespace CVGS.Controllers
                 {
                     game.UserReview = reviewDetail;
                 }
-                else
-                {
-                    game.Reviews.Add(reviewDetail);
-                }
+
+                game.Reviews.Add(reviewDetail); // Add the review to the list of reviews
             }
 
             return View(game);
         }
+
     }
 }

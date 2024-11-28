@@ -49,16 +49,10 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12 mb-2">
-                                <a href="#" class="btn btn-success w-100">Add New Games</a>
+                                <a asp-controller="Admin" asp-action="AddGame" class="btn btn-success w-100">Add New Games</a>
                             </div>
                             <div class="col-12 mb-2">
-                                <a href="#" class="btn btn-primary w-100">Edit Game Details</a>
-                            </div>
-                            <div class="col-12 mb-2">
-                                <a href="#" class="btn btn-warning w-100">Change Availability</a>
-                            </div>
-                            <div class="col-12 mb-2">
-                                <a href="#" class="btn btn-danger w-100">Remove From Catalogue</a>
+                                <a asp-controller="Admin" asp-action="DeleteEditGames" class="btn btn-danger w-100">Edit or Remove Games</a>
                             </div>
                         </div>
                     </div>
