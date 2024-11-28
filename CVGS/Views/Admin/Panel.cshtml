@@ -8,7 +8,7 @@
     </div>
 
     <!--Reports-->
-    <div class="card-body mb-4">
+    <div class="card-body mb-2">
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title text-center">Reports</h3>
@@ -16,19 +16,13 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-4 mb-2">
-                        <a href="#" class="btn btn-primary w-100">Game List Report</a>
+                        <a asp-controller="Admin" asp-action="AllGames" class="btn btn-primary w-100">Game List</a>
                     </div>
                     <div class="col-md-4 mb-2">
-                        <a href="#" class="btn btn-primary w-100">Game Detail Report</a>
+                        <a asp-controller="Admin" asp-action="AllUsers" class="btn btn-primary w-100">Member List</a>
                     </div>
                     <div class="col-md-4 mb-2">
-                        <a href="#" class="btn btn-primary w-100">Member List Report</a>
-                    </div>
-                    <div class="col-md-4 mb-2">
-                        <a href="#" class="btn btn-primary w-100">Member Detail Report</a>
-                    </div>
-                    <div class="col-md-4 mb-2">
-                        <a href="#" class="btn btn-primary w-100">Wish List Report</a>
+                        <a asp-controller="Admin" asp-action="AllUsersWithWishlist" class="btn btn-primary w-100">Members WishLists</a>
                     </div>
                     <div class="col-md-4 mb-2">
                         <a href="#" class="btn btn-primary w-100">Sales Report</a>
@@ -39,9 +33,9 @@
     </div>
 
     <div class="container">
-        <div class="row mb-4">
+        <div class="row mb-3">
             <!--Games-->
-            <div class="col-lg-3 col-md-6 mb-4">
+            <div class="col-lg-4 col-md-6 mb-3">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title text-center">Manage Games</h3>
@@ -60,7 +54,7 @@
             </div>
 
             <!--Events-->
-            <div class="col-lg-3 col-md-6 mb-4">
+            <div class="col-lg-4 col-md-6 mb-3">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title text-center">Manage Events</h3>
@@ -68,16 +62,10 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12 mb-2">
-                                <a href="#" class="btn btn-success w-100">Add Event</a>
+                                <a asp-controller="Admin" asp-action="AddEvent" class="btn btn-success w-100">Add Event</a>
                             </div>
                             <div class="col-12 mb-2">
-                                <a href="#" class="btn btn-primary w-100">Edit Event</a>
-                            </div>
-                            <div class="col-12 mb-2">
-                                <a href="#" class="btn btn-warning w-100">Cancel Event</a>
-                            </div>
-                            <div class="col-12 mb-2">
-                                <a href="#" class="btn btn-danger w-100">Delete Event</a>
+                                <a asp-controller="Admin" asp-action="AllEvents" class="btn btn-danger w-100">Edit or Remove Event</a>
                             </div>
                         </div>
                     </div>
@@ -85,7 +73,7 @@
             </div>
 
             <!--Reviews-->
-            <div class="col-lg-3 col-md-6 mb-4">
+            <div class="col-lg-4 col-md-6 mb-3">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title text-center">Manage Reviews</h3>
@@ -93,32 +81,10 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12 mb-2">
-                                <a asp-controller="Admin" asp-action="UnapprovedReviews" class="btn btn-success w-100">Unapproved Reviews</a>
+                                <a asp-controller="Admin" asp-action="UnapprovedReviews" class="btn btn-warning w-100">Unapproved Reviews</a>
                             </div>
                             <div class="col-12 mb-2">
-                                <a asp-controller="Admin" asp-action="AllReviews" class="btn btn-danger w-100">All Reviews</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!--Support-->
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title text-center">User Support</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12 mb-2">
-                                <a href="#" class="btn btn-info w-100">View User Feedback</a>
-                            </div>
-                            <div class="col-12 mb-2">
-                                <a href="#" class="btn btn-info w-100">Respond to Support Tickets</a>
-                            </div>
-                            <div class="col-12 mb-2">
-                                <a href="#" class="btn btn-info w-100">Manage FAQs</a>
+                                <a asp-controller="Admin" asp-action="AllReviews" class="btn btn-primary w-100">All Reviews</a>
                             </div>
                         </div>
                     </div>
@@ -126,6 +92,4 @@
             </div>
         </div>
     </div>
-
-
 </div>

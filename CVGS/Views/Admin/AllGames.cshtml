@@ -1,0 +1,45 @@
+﻿@model IEnumerable<CVGS.Models.GameViewModel>
+
+@{
+    ViewData["Title"] = "All Games";
+}
+
+<div class="card mt-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h2 class="card-title">All Games</h2>
+        <a asp-controller="Admin" asp-action="Panel" class="btn btn-danger ms-auto">Return to Panel</a>
+    </div>
+
+    <div class="card-body">
+        <form method="get" asp-action="AllGames" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="searchQuery" value="@ViewBag.SearchQuery" class="form-control" placeholder="Search for games..." />
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </form>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Game Title</th>
+                    <th scope="col">Platform</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var game in Model)
+                {
+                    <tr>
+                        <td>@game.Title</td>
+                        <td>@game.Platform</td>
+                        <td>@game.Price</td>
+                        <td>
+                            <a asp-controller="Admin" asp-action="GameDetails" asp-route-id="@game.GameID" class="btn btn-primary btn-sm">Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -21,7 +21,9 @@ namespace CVGS
             builder.Entity<User>()
                 .HasOne(u => u.Address)
                 .WithOne(a => a.User)
-                .HasForeignKey<Address>(a => a.UserId);
+                .HasForeignKey<Address>(a => a.UserId)
+                .OnDelete(DeleteBehavior.Cascade);  // Enable cascade delete
+
 
             // One-to-one relationship between User and Preference
             builder.Entity<User>()
@@ -33,7 +35,8 @@ namespace CVGS
             builder.Entity<User>()
                 .HasOne(u => u.ShippingAddress)
                 .WithOne(s => s.User)
-                .HasForeignKey<ShippingAddress>(s => s.UserId);
+                .HasForeignKey<ShippingAddress>(s => s.UserId)
+                .OnDelete(DeleteBehavior.Cascade);  // Enable cascade delete
 
             builder.Entity<CartItem>()
                 .HasOne(ci => ci.Cart)
@@ -91,7 +94,192 @@ namespace CVGS
             new Game { GameID = 30, Title = "Splatoon 3", Description = "A colorful third-person shooter where ink is your weapon.", Platform = "Nintendo Switch", Category = "Shooter", LanguageSupport = "English, French", Price = 59.99m, Rating = null, CoverImageURL = "/images/splatoon3.jpg", DownloadSize = 2500000000 }
         );
 
-            builder.Entity<Review>(b => {
+            builder.Entity<Event>().HasData(
+            new Event
+            {
+                EventId = 1,
+                Name = "Battle Royale Championship",
+                Description = "Compete in an intense battle royale tournament and win amazing prizes!",
+                Date = new DateOnly(2024, 12, 15),
+                Location = "eSports Arena, Los Angeles",
+                MaxRegistrations = 200
+            },
+            new Event
+            {
+                EventId = 2,
+                Name = "Retro Gaming Night",
+                Description = "Enjoy classic games from the 80s and 90s on original consoles.",
+                Date = new DateOnly(2024, 12, 20),
+                Location = "Pixel Café, New York",
+                MaxRegistrations = 50
+            },
+            new Event
+            {
+                EventId = 3,
+                Name = "Indie Game Showcase",
+                Description = "Discover the best indie games from up-and-coming developers.",
+                Date = new DateOnly(2024, 12, 22),
+                Location = "GameDev Convention Center, San Francisco",
+                MaxRegistrations = 100
+            },
+            new Event
+            {
+                EventId = 4,
+                Name = "Cosplay Contest",
+                Description = "Show off your best gaming-themed cosplay and win exclusive rewards.",
+                Date = new DateOnly(2024, 12, 25),
+                Location = "Anime Expo Hall, Chicago",
+                MaxRegistrations = 75
+            },
+            new Event
+            {   
+                EventId = 5,
+                Name = "League of Legends Meetup",
+                Description = "Join fellow summoners for a day of friendly matches and discussions.",
+                Date = new DateOnly(2025, 1, 5),
+                Location = "Riot HQ, Seattle",
+                MaxRegistrations = 150
+            },
+            new Event
+            {
+                EventId = 6,
+                Name = "Minecraft Build-Off",
+                Description = "Showcase your creativity in a timed building challenge.",
+                Date = new DateOnly(2025, 1, 10),
+                Location = "Creative Zone, Houston",
+                MaxRegistrations = 100
+            },
+            new Event
+            {
+                EventId = 7,
+                Name = "VR Experience Day",
+                Description = "Immerse yourself in the latest VR games and experiences.",
+                Date = new DateOnly(2025, 1, 15),
+                Location = "Virtual Arena, Boston",
+                MaxRegistrations = 80
+            },
+            new Event
+            {
+                EventId = 8,
+                Name = "Speedrunning Workshop",
+                Description = "Learn the art of speedrunning from professional gamers.",
+                Date = new DateOnly(2025, 1, 18),
+                Location = "Streamer Studio, Denver",
+        MaxRegistrations = 60
+            },
+            new Event
+            {
+                EventId = 9,
+                Name = "Overwatch 2 Tournament",
+                Description = "Team up and compete in this high-octane FPS competition.",
+                Date = new DateOnly(2025, 1, 22),
+                Location = "Blizzard HQ, Irvine",
+                MaxRegistrations = 100
+            },
+            new Event
+            {
+                EventId = 10,
+                Name = "Pokemon Card Battle",
+                Description = "Bring your deck and challenge other trainers to card battles.",
+                Date = new DateOnly(2025, 1, 28),
+                Location = "Card Haven, Dallas",
+                MaxRegistrations = 50
+            },
+            new Event
+            {
+                EventId = 11,
+                Name = "Dungeons & Dragons Campaign Night",
+                Description = "Join a thrilling one-shot campaign hosted by experienced DMs.",
+                Date = new DateOnly(2025, 2, 1),
+                Location = "Adventure Guild, Portland",
+                MaxRegistrations = 40
+            },
+            new Event
+            {
+                EventId = 12,
+                Name = "Fortnite Duo Challenge",
+                Description = "Team up with a friend and aim for Victory Royale!",
+                Date = new DateOnly(2025, 2, 5),
+                Location = "Battle Grounds, Miami",
+                MaxRegistrations = 100
+            },
+            new Event
+            {
+                EventId = 13,
+                Name = "Elden Ring Lore Discussion",
+                Description = "Dive deep into the lore of Elden Ring with fellow fans.",
+                Date = new DateOnly(2025, 2, 10),
+                Location = "Lore Hall, Philadelphia",
+                MaxRegistrations = 70
+            },
+            new Event
+            {
+                EventId = 14,
+                Name = "Smash Bros. Ultimate Showdown",
+                Description = "Compete in a 1v1 Smash Bros. Ultimate tournament.",
+                Date = new DateOnly(2025, 2, 14),
+                Location = "Nintendo Center, Atlanta",
+                MaxRegistrations = 80
+            },
+            new Event
+            {
+                EventId = 15,
+                Name = "Game Development Seminar",
+                Description = "Learn tips and tricks from professional game developers.",
+                Date = new DateOnly(2025, 2, 18),
+                Location = "Tech Hub, Austin",
+                MaxRegistrations = 100
+            },
+            new Event
+            {
+                EventId = 16,
+                Name = "Board Game Bonanza",
+                Description = "Explore a variety of board games with fellow enthusiasts.",
+                Date = new DateOnly(2025, 2, 20),
+                Location = "Tabletop Tavern, Detroit",
+                MaxRegistrations = 50
+            },
+            new Event
+            {
+                EventId = 17,
+                Name = "Rocket League Championship",
+                Description = "Show off your aerial skills in this car soccer tournament.",
+                Date = new DateOnly(2025, 2, 25),
+                Location = "Arena Dome, Phoenix",
+                MaxRegistrations = 120
+            },
+            new Event
+            {
+                EventId = 18,
+                Name = "Horror Game Marathon",
+                Description = "Brace yourself for a night of spooky gaming experiences.",
+                Date = new DateOnly(2025, 2, 28),
+                Location = "Haunted Hub, Orlando",
+                MaxRegistrations = 40
+            },
+            new Event
+            {
+                EventId = 19,
+                Name = "Street Fighter V Exhibition",
+                Description = "Show your skills in an exciting Street Fighter competition.",
+                Date = new DateOnly(2025, 3, 1),
+                Location = "Arcade Central, San Diego",
+                MaxRegistrations = 80
+            },
+            new Event
+            {
+                EventId = 20,
+                Name = "Cozy Animal Crossing Meet-Up",
+                Description = "Relax and share island tips with other Animal Crossing players.",
+                Date = new DateOnly(2025, 3, 5),
+                Location = "Villager Café, Charlotte",
+                MaxRegistrations = 30
+            }
+        );
+
+
+            builder.Entity<Review>(b =>
+            {
 
                 b.HasOne(r => r.Game)
                 .WithMany(g => g.Review)
@@ -102,15 +290,22 @@ namespace CVGS
                 .HasForeignKey(r => r.UserId);
 
                 b.HasData(
-                    new Review() {
-                        Id=1,
+                    new Review()
+                    {
+                        Id = 1,
                         UserId = "05e61254-11dc-44d9-89e7-0e574ce7099a",
-                        GameId = 1, Content = "Black  jack", Rating = 1, Approved = true
+                        GameId = 1,
+                        Content = "Black  jack",
+                        Rating = 1,
+                        Approved = true
                     },
-                    new Review() {
-                        Id=5,
-                        UserId= "6c9c58e6-5b8d-42c5-8cf9-1e7c7480f5d2",
-                        GameId = 6, Content = "Epic cyberpunky game", Rating = 3,
+                    new Review()
+                    {
+                        Id = 5,
+                        UserId = "6c9c58e6-5b8d-42c5-8cf9-1e7c7480f5d2",
+                        GameId = 6,
+                        Content = "Epic cyberpunky game",
+                        Rating = 3,
                         Approved = true
                     },
                     new Review()
@@ -147,7 +342,7 @@ namespace CVGS
             {
                 b.HasMany(w => w.User)
                 .WithMany(u => u.Wishlist);
-                
+
                 b.HasMany(w => w.Game)
                 .WithMany(g => g.Wishlist);
 
@@ -157,22 +352,22 @@ namespace CVGS
                         WishlistId = 1,
                         UserId = "05e61254-11dc-44d9-89e7-0e574ce7099a",
                         GameId = 1
-                    },new Wishlist()
+                    }, new Wishlist()
                     {
                         WishlistId = 2,
                         UserId = "05e61254-11dc-44d9-89e7-0e574ce7099a",
                         GameId = 2
-                    },new Wishlist()
+                    }, new Wishlist()
                     {
                         WishlistId = 3,
                         UserId = "05e61254-11dc-44d9-89e7-0e574ce7099a",
                         GameId = 11
-                    },new Wishlist()
+                    }, new Wishlist()
                     {
                         WishlistId = 4,
                         UserId = "05e61254-11dc-44d9-89e7-0e574ce7099a",
                         GameId = 25
-                    },new Wishlist()
+                    }, new Wishlist()
                     {
                         WishlistId = 5,
                         UserId = "05e61254-11dc-44d9-89e7-0e574ce7099a",
@@ -184,44 +379,44 @@ namespace CVGS
                         WishlistId = 6,
                         UserId = "6c9c58e6-5b8d-42c5-8cf9-1e7c7480f5d2",
                         GameId = 3
-                    },new Wishlist()
+                    }, new Wishlist()
                     {
                         WishlistId = 7,
                         UserId = "6c9c58e6-5b8d-42c5-8cf9-1e7c7480f5d2",
                         GameId = 4
-                    },new Wishlist()
+                    }, new Wishlist()
                     {
                         WishlistId = 8,
                         UserId = "6c9c58e6-5b8d-42c5-8cf9-1e7c7480f5d2",
                         GameId = 28
-                    },new Wishlist()
+                    }, new Wishlist()
                     {
                         WishlistId = 9,
                         UserId = "6c9c58e6-5b8d-42c5-8cf9-1e7c7480f5d2",
                         GameId = 13
-                    },new Wishlist()
+                    }, new Wishlist()
                     {
                         WishlistId = 10,
                         UserId = "6c9c58e6-5b8d-42c5-8cf9-1e7c7480f5d2",
                         GameId = 30
                     },
-                    
+
                     new Wishlist()
                     {
                         WishlistId = 11,
                         UserId = "042f95a1-3247-4e6a-a375-d2165a8bf16c",
                         GameId = 30
-                    },new Wishlist()
+                    }, new Wishlist()
                     {
                         WishlistId = 12,
                         UserId = "042f95a1-3247-4e6a-a375-d2165a8bf16c",
                         GameId = 23
-                    },new Wishlist()
+                    }, new Wishlist()
                     {
                         WishlistId = 13,
                         UserId = "042f95a1-3247-4e6a-a375-d2165a8bf16c",
                         GameId = 20
-                    },new Wishlist()
+                    }, new Wishlist()
                     {
                         WishlistId = 14,
                         UserId = "042f95a1-3247-4e6a-a375-d2165a8bf16c",
@@ -241,5 +436,8 @@ namespace CVGS
         public DbSet<Wishlist> Wishlist { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<Event> Events { get; set; }
+        public DbSet<EventRegistration> EventRegistrations { get; set; }
+
     }
 }

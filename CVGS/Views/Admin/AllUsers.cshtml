@@ -1,0 +1,82 @@
+﻿@model IEnumerable<UserRoleViewModel>
+
+@{
+    ViewData["Title"] = "All Users";
+}
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h2 class="card-title">All Users</h2>
+            <a asp-controller="Admin" asp-action="Panel" class="btn btn-danger ms-auto">Return to Panel</a>
+        </div>
+
+        <div class="card-body">
+            <!-- Section for Users -->
+            <h4 class="mt-4">Users</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Display Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var userRole in Model.Where(ur => ur.Roles.Contains("User")))
+                        {
+                            <tr>
+                                <td>@userRole.User.UserName</td>
+                                <td>@userRole.User.Email</td>
+                                <td>
+                                    <a asp-controller="Admin" asp-action="UserDetails" asp-route-displayName="@userRole.User.UserName" class="btn btn-info btn-sm me-2">
+                                        <i class="bi bi-eye"></i> Details
+                                    </a>
+                                    <form asp-controller="Admin" asp-action="DeleteUser" asp-route-displayName="@userRole.User.UserName" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="bi bi-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Section for Admins -->
+            <h4 class="mt-4">Admins</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Display Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var userRole in Model.Where(ur => ur.Roles.Contains("Admin")))
+                        {
+                            <tr>
+                                <td>@userRole.User.UserName</td>
+                                <td>@userRole.User.Email</td>
+                                <td>
+                                    <a asp-controller="Admin" asp-action="UserDetails" asp-route-displayName="@userRole.User.UserName" class="btn btn-info btn-sm me-2">
+                                        <i class="bi bi-eye"></i> Details
+                                    </a>
+                                    <form asp-controller="Admin" asp-action="DeleteUser" asp-route-displayName="@userRole.User.UserName" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="bi bi-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

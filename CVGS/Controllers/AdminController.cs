@@ -8,6 +8,9 @@ using CVGS.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Identity;
+using CVGS.Service;
+using System.Diagnostics;
 
 namespace CVGS.Controllers
 {
@@ -15,12 +18,15 @@ namespace CVGS.Controllers
     public class AdminController : Controller
     {
         private readonly CvgsDbContext _context;
+        private readonly UserManager<User> _userManager;
         private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public AdminController(CvgsDbContext context, IWebHostEnvironment hostingEnvironment)
+        public AdminController(CvgsDbContext context, IWebHostEnvironment hostingEnvironment, UserManager<User> userManager)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
+            _userManager = userManager;
+
         }
 
         public IActionResult Panel()
@@ -189,7 +195,6 @@ namespace CVGS.Controllers
             return View(model);
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditGame(GameViewModel model)
@@ -250,5 +255,284 @@ namespace CVGS.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> AllEvents()
+        {
+            var events = await _context.Events.ToListAsync();
+            return View(events);
+        }
+
+        public IActionResult AddEvent()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddEvent(EventViewModel eventViewModel)
+        {
+            // Check if a similar event already exists in the database
+            var existingEvent = await _context.Events
+                .Where(e => e.Name == eventViewModel.Name && e.Date == eventViewModel.Date)
+                .FirstOrDefaultAsync();
+
+            // If the event already exists, add a model state error
+            if (existingEvent != null)
+            {
+                ModelState.AddModelError(string.Empty, "An event with the same name and date already exists.");
+                return View(eventViewModel);
+            }
+
+            if (ModelState.IsValid)
+            {
+                var eventItem = new Event
+                {
+                    Name = eventViewModel.Name,
+                    Date = eventViewModel.Date,
+                    Location = eventViewModel.Location,
+                    Description = eventViewModel.Description,
+                    MaxRegistrations = eventViewModel.MaxRegistrations
+                };
+
+                _context.Add(eventItem);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Panel));
+            }
+
+            return View(eventViewModel);
+        }
+
+        public async Task<IActionResult> EditEvent(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var eventItem = await _context.Events.FindAsync(id);
+            if (eventItem == null)
+            {
+                return NotFound();
+            }
+            return View(eventItem);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditEvent(int id, Event eventItem)
+        {
+            if (id != eventItem.EventId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                _context.Update(eventItem);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(AllEvents));
+            }
+            return View(eventItem);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteEvent(int id)
+        {
+            var eventItem = await _context.Events.FindAsync(id);
+
+            if (eventItem != null)
+            {
+                _context.Events.Remove(eventItem); 
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(AllEvents));
+        }
+
+        public IActionResult AllGames(string searchQuery)
+        {
+            var gamesQuery = _context.Games.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                gamesQuery = gamesQuery.Where(g => g.Title.Contains(searchQuery));
+            }
+
+            var games = gamesQuery
+                .Select(g => new GameViewModel
+                {
+                    GameID = g.GameID,
+                    Title = g.Title,
+                    Platform = g.Platform,
+                    Price = g.Price,
+                    CoverImageURL = g.CoverImageURL
+                })
+                .ToList();
+
+            ViewBag.SearchQuery = searchQuery;
+
+            return View(games);
+        }
+
+        public IActionResult GameDetails(int id)
+        {
+            var game = _context.Games
+                .Where(g => g.GameID == id)
+                .Select(g => new GameViewModel
+                {
+                    GameID = g.GameID,
+                    Title = g.Title,
+                    Description = g.Description,
+                    Platform = g.Platform,
+                    Category = g.Category,
+                    LanguageSupport = g.LanguageSupport,
+                    Price = g.Price,
+                    Rating = (float)(g.Review.Any() ? g.Review.Average(r => r.Rating) : 0),
+                    CoverImageURL = g.CoverImageURL,
+                    DownloadSize = g.DownloadSize,
+                    Reviews = new List<ReviewDetailViewModel>(),
+                    UserReview = null
+                })
+                .FirstOrDefault();
+
+            return View(game);
+        }
+
+        public async Task<IActionResult> AllUsers()
+        {
+            // Get all users
+            var users = await _userManager.Users.ToListAsync();
+
+            // Create a list to store users with their roles
+            var userRoles = new List<UserRoleViewModel>();
+
+            // For each user, get their roles and store them
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                var userRoleViewModel = new UserRoleViewModel
+                {
+                    User = user,
+                    Roles = roles
+                };
+                userRoles.Add(userRoleViewModel);
+            }
+
+            return View(userRoles);
+        }
+
+
+        public async Task<IActionResult> UserDetails(string displayName)
+        {
+            if (string.IsNullOrEmpty(displayName))
+            {
+                return BadRequest("Display Name is required.");
+            }
+
+            var user = await _userManager.Users
+                .Include(u => u.Address)
+                .Include(u => u.ShippingAddress)
+                .Include(u => u.Preferences)
+                .FirstOrDefaultAsync(u => u.UserName == displayName);
+
+            if (user == null)
+            {
+                Debug.WriteLine("User not found");
+                return NotFound();
+            }
+
+            var model = new ProfileViewModel
+            {
+                ActualName = user.FullName ?? "N/A",
+                Gender = user.Gender ?? "N/A",
+                BirthDate = user.BirthDate.HasValue
+                    ? (DateOnly)user.BirthDate.Value
+                    : DateOnly.MinValue,
+
+                ReceivePromotionalEmails = user.ReceivePromotionalEmails ?? false,
+
+                Preferences = new PreferenceViewModel
+                {
+                    FavouritePlatforms = user.Preferences?.FavouritePlatforms ?? new List<string>(),
+                    FavouriteGameCategories = user.Preferences?.FavouriteGameCategories ?? new List<string>(),
+                    LanguagePreferences = user.Preferences?.LanguagePreferences ?? new List<string>()
+                },
+
+                Address = new AddressViewModel
+                {
+                    PhoneNumber = user.Address?.PhoneNumber ?? "N/A",
+                    StreetAddress = user.Address?.StreetAddress ?? "N/A",
+                    AptSuite = user.Address?.AptSuite ?? "N/A",
+                    City = user.Address?.City ?? "N/A",
+                    Province = user.Address?.Province ?? "N/A",
+                    PostalCode = user.Address?.PostalCode ?? "N/A",
+                    Country = user.Address?.Country ?? "N/A",
+                    DeliveryInstructions = user.Address?.DeliveryInstructions ?? "N/A",
+                    SameAsShippingAddress = user.Address?.SameAsShippingAddress ?? false,
+                    ShippingPhoneNumber = user.ShippingAddress?.ShippingPhoneNumber ?? "N/A",
+                    ShippingStreetAddress = user.ShippingAddress?.ShippingStreetAddress ?? "N/A",
+                    ShippingAptSuite = user.ShippingAddress?.ShippingAptSuite ?? "N/A",
+                    ShippingCity = user.ShippingAddress?.ShippingCity ?? "N/A",
+                    ShippingProvince = user.ShippingAddress?.ShippingProvince ?? "N/A",
+                    ShippingPostalCode = user.ShippingAddress?.ShippingPostalCode ?? "N/A",
+                    ShippingCountry = user.ShippingAddress?.ShippingCountry ?? "N/A"
+                },
+
+                FavouritePlatforms = user.Preferences?.FavouritePlatforms ?? new List<string>(),
+                FavouriteGameCategories = user.Preferences?.FavouriteGameCategories ?? new List<string>(),
+                LanguagePreferences = user.Preferences?.LanguagePreferences ?? new List<string>()
+            };
+            return View(model);
+        }
+
+
+        public async Task<IActionResult> DeleteUser(string displayName)
+        {
+            if (string.IsNullOrEmpty(displayName))
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == displayName);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var address = await _context.Addresses.FirstOrDefaultAsync(a => a.UserId == user.Id);
+            if (address != null)
+            {
+                address.UserId = null;
+                _context.Addresses.Update(address);
+                await _context.SaveChangesAsync();
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+            {
+                TempData["SuccessMessage"] = "User deleted successfully.";
+                return RedirectToAction("Panel");
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to delete the user.";
+                return RedirectToAction("Panel");
+            }
+        }
+
+        public async Task<IActionResult> AllUsersWithWishlist()
+        {
+            var usersWithWishlist = await _context.Users
+                .Include(u => u.Wishlist)
+                .ToListAsync();
+
+            var viewModel = usersWithWishlist.Select(u => new WishlistViewModel
+            {
+                GameIdList = u.Wishlist.Select(w => w.GameId).ToList()
+            }).ToList();
+
+            return View(viewModel);
+        }
     }
 }
