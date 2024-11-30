@@ -1,0 +1,35 @@
+﻿@model List<CVGS.Models.UserOrdersViewModel>
+
+<div class="container mt-4">
+    <h2 class="mb-4">Your Orders</h2>
+    @if (Model.Any())
+    {
+        <div class="row">
+            @foreach (var order in Model)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a asp-controller="Orders" asp-action="OrderDetails" asp-route-orderId="@order.OrderId" class="text-decoration-none text-dark">
+                                    Order ID: @order.OrderId
+                                </a>
+                            </h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Order Date: @order.OrderDate.ToString("g")</h6>
+                            <p class="card-text">
+                                <strong>Total Price:</strong> @order.TotalPrice.ToString("C") <br />
+                                <strong>Payment Method:</strong> @order.PaymentMethod
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            You have no orders.
+        </div>
+    }
+</div>

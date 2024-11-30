@@ -1,54 +1,63 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using CVGS.Models; // Adjust based on your namespace
-using System.Linq;
-using CVGS;
-using CVGS.Entities;
+﻿using CVGS.Entities;
+using CVGS.Models;
+using CVGS.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CVGS.Controllers
 {
-    public class OrderController : Controller
+    [Authorize]
+    public class OrdersController : Controller
     {
         private readonly CvgsDbContext _context;
 
-        public OrderController(CvgsDbContext context)
+        public OrdersController(CvgsDbContext context)
         {
             _context = context;
         }
 
-        public IActionResult OrderConfirmation(int orderId)
+        public IActionResult OrderList()
         {
-            // Fetch the order by ID
-            var order = _context.Orders
-                                .Include(o => o.OrderDetails)
-                                .ThenInclude(od => od.Game) // Assuming Game info is needed
-                                .Include(o => o.ShippingAddress) // Include user shipping address
-                                .FirstOrDefault(o => o.OrderId == orderId);
+            // Use the logged-in user's ID
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if (order == null)
-            {
-                return NotFound("Order not found."); // Handle invalid order ID
-            }
+            // Fetch the user's orders
+            var orders = _context.Orders
+                .Where(o => o.UserId == userId)
+                .Select(o => new UserOrdersViewModel
+                {
+                    OrderId = o.OrderId,
+                    OrderDate = o.OrderDate,
+                    TotalPrice = o.TotalPrice,
+                    PaymentMethod = o.PaymentMethod
+                })
+                .ToList();
 
-            // Prepare the view model
-            var viewModel = new OrderViewModel
-            {
-                OrderedDetails = order.OrderDetails.ToList(),
-                Subtotal = order.OrderDetails.Sum(od => od.Price * od.Quantity),
-                TaxRate = order.TotalPrice > 0 ? (order.TotalPrice - order.OrderDetails.Sum(od => od.Price * od.Quantity)) / order.OrderDetails.Sum(od => od.Price * od.Quantity) : 0, // Calculate from totals
-                TaxAmount = order.TotalPrice - order.OrderDetails.Sum(od => od.Price * od.Quantity),
-                TotalPrice = order.TotalPrice
-            };
-
-            ViewBag.UserDetails = new
-            {
-                Name = $"{order.ShippingAddress.User.FullName}",
-                Address = $"{order.ShippingAddress.ShippingStreetAddress}, {order.ShippingAddress.ShippingCity}, {order.ShippingAddress.ShippingProvince}, {order.ShippingAddress.ShippingPostalCode}",
-                Phone = order.ShippingAddress.ShippingPhoneNumber
-            };
-
-            return View(viewModel);
+            return View(orders);
         }
 
+        public IActionResult OrderDetails(int orderId)
+        {
+            // Fetch the order details by orderId
+            var orderDetails = _context.OrderDetails
+                .Where(od => od.OrderId == orderId)
+                .Select(od => new OrderDetailViewModel
+                {
+                    GameTitle = od.Game.Title,
+                    GameImageUrl = od.Game.CoverImageURL,
+                    Price = od.Price,
+                    Quantity = od.Quantity,
+                    GameType = od.GameType
+                })
+                .ToList();
+
+            if (!orderDetails.Any())
+            {
+                return NotFound();
+            }
+
+            return View(orderDetails);
+        }
     }
 }
