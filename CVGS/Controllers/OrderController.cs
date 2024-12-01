@@ -31,7 +31,9 @@ namespace CVGS.Controllers
                     OrderDate = o.OrderDate,
                     TotalPrice = o.TotalPrice,
                     PaymentMethod = o.PaymentMethod,
-                    GameType = _context.OrderDetails.First(d=>d.OrderId==o.OrderId).GameType
+                    GameType = _context.OrderDetails.First(d=>d.OrderId==o.OrderId).GameType,
+                    GameTitle = _context.Games.First(
+                        g=>g.GameID==_context.OrderDetails.First(d => d.OrderId == o.OrderId).GameId).Title
                 })
                 .ToList();
 

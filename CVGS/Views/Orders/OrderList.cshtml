@@ -12,6 +12,7 @@
                         <div class="card-body">
                             <h5 class="card-title">
                                 <a asp-controller="Orders" asp-action="OrderDetails" asp-route-orderId="@order.OrderId" class="text-decoration-none text-dark">
+                                    @order.GameTitle <br />
                                     Order ID: @order.OrderId
                                 </a>
                             </h5>
