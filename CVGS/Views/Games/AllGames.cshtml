@@ -10,12 +10,14 @@
     <form asp-action="AllGames" method="get" class="d-flex justify-content-center">
         <input type="text" name="searchQuery" class="form-control w-50" placeholder="Search games by title" value="@ViewBag.SearchQuery" />
         <button type="submit" class="btn btn-primary ms-2">Search</button>
-        <a asp-controller="Games" asp-action="AllGames" class="btn btn-warning">Refresh</a>
     </form>
+    <a asp-controller="Games" asp-action="RecommendedGames" class="btn btn-warning">Recommended</a>
+    <a asp-controller="Games" asp-action="AllGames" class="btn btn-primary">Show all games</a>
 </div>
 
 <!-- Game List -->
 <div class="container">
+    <h3>@ViewBag.GameListMode</h3>
     <div class="row">
         @foreach (var game in Model)
         {

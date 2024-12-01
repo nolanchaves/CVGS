@@ -129,7 +129,7 @@ namespace CVGS.Controllers
 
                 var exists = await _context.Wishlist.FirstOrDefaultAsync(r => r.UserId == _userId && r.GameId == id);
 
-                var game = _context.Games.FirstOrDefault(g => g.GameID == exists.GameId);
+                var gameTitle = _context.Games.FirstOrDefault(g => g.GameID == id).Title;
                 if (exists == null)
                 {
                     exists = new Wishlist();
@@ -139,12 +139,12 @@ namespace CVGS.Controllers
                     exists.GameId = id;
 
                     await _context.SaveChangesAsync();
-                    TempData["SuccessMessage"] = $"{game.Title} has been added to your Wishlist.";
+                    TempData["SuccessMessage"] = $"{gameTitle} has been added to your Wishlist.";
                     Debug.WriteLine("Wishlist: added");
                 }
                 else
                 {
-                    TempData["SuccessMessage"] = $"{game.Title} is already in your Wishlist.";
+                    TempData["SuccessMessage"] = $"{gameTitle} is already in your Wishlist.";
                     Debug.WriteLine("Wishlist exists");
                 }
                 return RedirectToAction("ViewAllWishlist");

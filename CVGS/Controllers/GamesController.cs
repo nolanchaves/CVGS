@@ -4,6 +4,7 @@ using CVGS.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CVGS.Controllers
 {
@@ -54,9 +55,9 @@ namespace CVGS.Controllers
 
             var games = _context.Games
                 .Where(g=>
-                    userPref.LanguagePreferences.Any(p=>g.LanguageSupport.Contains(p))||
-                    userPref.FavouritePlatforms.Any(p=>g.Platform.Contains(p))||
-                    userPref.FavouriteGameCategories.Any(p=>g.Category.Contains(p))
+                    (userPref.LanguagePreferences.Any(p=>g.LanguageSupport.Contains(p))||
+                    userPref.FavouritePlatforms.Any(p=>g.Platform.Contains(p)))&&
+                    (userPref.FavouriteGameCategories.Any(p=>g.Category.Contains(p)))
                 )
                 .Select(g => new GameViewModel
                 {
@@ -68,6 +69,11 @@ namespace CVGS.Controllers
                 })
                 .ToList();
 
+            //if (games.IsNullOrEmpty())
+            //{
+            //    return RedirectToAction("AllGames");
+            //}
+            ViewBag.GameListMode = "Recommended Games";
 
             return View("AllGames",games);
         }
