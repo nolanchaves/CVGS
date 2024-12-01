@@ -21,6 +21,11 @@
                                 <strong>Payment Method:</strong> @order.PaymentMethod
                             </p>
                         </div>
+                        @if(order.GameType=="Digital"){
+                            <div class="d-flex justify-content-center mt-2">
+                                <a asp-controller="Orders" asp-action="DownloadOrder" asp-route-orderId="@order.OrderId" class="btn btn-primary">Download</a>
+                            </div>
+                        }
                     </div>
                 </div>
             }
