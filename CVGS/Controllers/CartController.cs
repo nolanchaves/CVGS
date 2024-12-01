@@ -177,31 +177,28 @@ namespace CVGS.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ProcessCheckout(CheckoutViewModel model)
+        public async Task<IActionResult> PlaceOrder(CheckoutViewModel model)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var user = await _userManager.GetUserAsync(User);
             user = await _context.Users.Include(u => u.Address).FirstOrDefaultAsync(u => u.Id == userId);
+            var cart = await _context.Carts.Include(c => c.CartItems).ThenInclude(ci => ci.Game).FirstOrDefaultAsync(c => c.UserID == userId);
 
-            var shippingAddress = await _context.ShippingAddresses.FirstOrDefaultAsync(a => a.ShippingAddressId == model.ShippingAddressId);
-
-            if (shippingAddress == null)
-            {
-                ModelState.AddModelError("", "Invalid shipping address.");
-                return View(model);
-            }
-
-            model.CartItems = await _context.CartItems
-                .Include(c => c.Game)
-                .Where(c => c.Cart.UserID == userId)
-                .ToListAsync();
-
-            decimal recalculatedTaxRate = GetUserTaxRate(user);
-
+            // Check if the model state is valid
             if (!ModelState.IsValid)
             {
+                // Reload the cart items to include in the model
+                model.CartItems = await _context.CartItems
+                    .Include(c => c.Game)
+                    .Where(c => c.Cart.UserID == userId)
+                    .ToListAsync();
+
+                // Optionally recalculate totals if needed
+                decimal recalculatedTaxRate = GetUserTaxRate(user);
                 decimal totalBeforeTax = model.CartItems.Sum(item => item.Quantity * item.Game.Price);
+                model.TotalBeforeTax = totalBeforeTax; // Set total before tax if you want to show it
+                model.TotalPrice = totalBeforeTax + (totalBeforeTax * GetUserTaxRate(await _userManager.GetUserAsync(User))); // Example tax calculation
                 decimal taxAmount = totalBeforeTax * recalculatedTaxRate;
                 decimal totalAfterTax = totalBeforeTax + taxAmount;
 
@@ -210,46 +207,51 @@ namespace CVGS.Controllers
                 model.TaxRate = recalculatedTaxRate;
                 model.TotalPrice = totalAfterTax;
 
-                return View(model);
+                return View("Checkout", model); // Return to checkout with the updated model
             }
 
+            if (cart == null || !cart.CartItems.Any())
+            {
+                TempData["ErrorMessage"] = "Your cart is empty.";
+                return RedirectToAction("ViewCart");
+            }
+
+            string ccType = GetCreditCardType(model.CreditCardNumber);
+
+            // Create a new order
             var order = new Order
             {
-                UserId = model.UserId,
+                UserId = userId,
                 OrderDate = DateTime.Now,
                 TotalPrice = model.TotalPrice,
-                PaymentMethod = "Credit Card",
-                ShippingAddressId = model.ShippingAddressId
+                TaxAmount = model.TaxAmount,
+                PaymentMethod = ccType,
+                OrderDetails = cart.CartItems.Select(item => new OrderDetail
+                {
+                    GameId = item.GameId,
+                    Quantity = item.Quantity,
+                    Price = item.Game.Price,
+                    GameType = item.GameType
+                }).ToList()
             };
 
             _context.Orders.Add(order);
+            _context.CartItems.RemoveRange(cart.CartItems); // Clear cart items after the order is placed
             await _context.SaveChangesAsync();
 
-            foreach (var cartItem in model.CartItems)
-            {
-                var orderDetail = new OrderDetail
-                {
-                    OrderId = order.OrderId,
-                    GameId = cartItem.GameId,
-                    Quantity = cartItem.Quantity,
-                    Price = cartItem.Game.Price,
-                    GameType = cartItem.GameType,
-                };
-                _context.OrderDetails.Add(orderDetail);
-            }
-
-            await _context.SaveChangesAsync();
-
-            var userCart = await _context.Carts.FirstOrDefaultAsync(c => c.UserID == model.UserId);
-            if (userCart != null)
-            {
-                _context.CartItems.RemoveRange(userCart.CartItems);
-                await _context.SaveChangesAsync();
-            }
-
+            TempData["SuccessMessage"] = "Your order has been placed successfully!";
             return RedirectToAction("OrderConfirmation", new { orderId = order.OrderId });
         }
 
+        public async Task<IActionResult> OrderConfirmation(int orderId)
+        {
+            var order = await _context.Orders.Include(o => o.OrderDetails).ThenInclude(oi => oi.Game).FirstOrDefaultAsync(o => o.OrderId == orderId);
+            if (order == null)
+            {
+                return NotFound();
+            }
+            return View(order);
+        }
 
         private decimal GetUserTaxRate(User user)
         {
@@ -279,6 +281,44 @@ namespace CVGS.Controllers
             var province = user.Address.Province;
             return taxRates.TryGetValue(province, out var rate) ? rate : 0.0m;
         }
+
+        public static string GetCreditCardType(string cardNumber)
+        {
+            if (string.IsNullOrWhiteSpace(cardNumber) || !long.TryParse(cardNumber.Replace(" ", "").Replace("-", ""), out _))
+            {
+                return "Invalid card number";
+            }
+
+            // Remove spaces or dashes if present
+            cardNumber = cardNumber.Replace(" ", "").Replace("-", "");
+
+            // Check for length and prefix to determine card type
+            if (cardNumber.Length == 16)
+            {
+                if (cardNumber.StartsWith("4"))
+                    return "Visa";
+                else if (cardNumber.StartsWith("51") || cardNumber.StartsWith("52") ||
+                         cardNumber.StartsWith("53") || cardNumber.StartsWith("54") ||
+                         cardNumber.StartsWith("55"))
+                    return "MasterCard";
+                else if (cardNumber.StartsWith("6011") || cardNumber.StartsWith("65") ||
+                         (cardNumber.StartsWith("622") && (int.Parse(cardNumber.Substring(2, 1)) >= 1 && int.Parse(cardNumber.Substring(2, 1)) <= 9)))
+                    return "Discover";
+            }
+            else if (cardNumber.Length == 15)
+            {
+                if (cardNumber.StartsWith("34") || cardNumber.StartsWith("37"))
+                    return "American Express";
+            }
+            else if (cardNumber.Length == 13)
+            {
+                if (cardNumber.StartsWith("4"))
+                    return "Visa";
+            }
+
+            return "Unknown card type";
+        }
+
 
     }
 }

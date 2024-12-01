@@ -4,6 +4,7 @@ using CVGS;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CVGS.Migrations
 {
     [DbContext(typeof(CvgsDbContext))]
-    partial class CvgsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241128200059_SeedGameEvents")]
+    partial class SeedGameEvents
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -798,11 +801,8 @@ namespace CVGS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("TaxAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("TotalBeforeTax")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("ShippingAddressId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)");
@@ -812,6 +812,8 @@ namespace CVGS.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("OrderId");
+
+                    b.HasIndex("ShippingAddressId");
 
                     b.ToTable("Orders");
                 });
@@ -1387,8 +1389,7 @@ namespace CVGS.Migrations
 
                     b.HasOne("CVGS.Entities.User", "User")
                         .WithOne("Address")
-                        .HasForeignKey("Address", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("Address", "UserId");
 
                     b.Navigation("ShippingAddress");
 
@@ -1444,6 +1445,17 @@ namespace CVGS.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("CVGS.Entities.Order", b =>
+                {
+                    b.HasOne("CVGS.Entities.ShippingAddress", "ShippingAddress")
+                        .WithMany()
+                        .HasForeignKey("ShippingAddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ShippingAddress");
+                });
+
             modelBuilder.Entity("CVGS.Entities.OrderDetail", b =>
                 {
                     b.HasOne("CVGS.Entities.Game", "Game")
@@ -1452,15 +1464,13 @@ namespace CVGS.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CVGS.Entities.Order", "Order")
+                    b.HasOne("CVGS.Entities.Order", null)
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Game");
-
-                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("CVGS.Entities.Preference", b =>
@@ -1497,8 +1507,7 @@ namespace CVGS.Migrations
                 {
                     b.HasOne("CVGS.Entities.User", "User")
                         .WithOne("ShippingAddress")
-                        .HasForeignKey("CVGS.Entities.ShippingAddress", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CVGS.Entities.ShippingAddress", "UserId");
 
                     b.Navigation("User");
                 });

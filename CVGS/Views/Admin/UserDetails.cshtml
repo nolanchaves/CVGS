@@ -1,0 +1,62 @@
+﻿@model CVGS.Models.ProfileViewModel
+
+@{
+    ViewData["Title"] = "User Profile";
+}
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h2 class="card-title">@Model.ActualName Profile</h2>
+            <a asp-controller="Admin" asp-action="AllUsers" class="btn btn-danger ms-auto">Return to Member List</a>
+        </div>
+
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-light">
+                <tbody>
+                    <tr>
+                        <td><strong>Actual Name</strong></td>
+                        <td>@Model.ActualName</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Gender</strong></td>
+                        <td>@Model.Gender</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Birth Date</strong></td>
+                        <td>@Model.BirthDate</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Receive Promotional Emails</strong></td>
+                        <td>@(Model.ReceivePromotionalEmails ? "Yes" : "No")</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phone Number</strong></td>
+                        <td>@(Model.Address.PhoneNumber)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Address</strong></td>
+                        <td>@(Model.Address.FullAddress)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Shipping Address</strong></td>
+                        <td>@(Model.Address.FullShippingAddress)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Favourite Platforms</strong></td>
+                        <td>@string.Join(", ", Model.FavouritePlatforms)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Favourite Game Categories</strong></td>
+                        <td>@string.Join(", ", Model.FavouriteGameCategories)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Language Preferences</strong></td>
+                        <td>@string.Join(", ", Model.LanguagePreferences)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

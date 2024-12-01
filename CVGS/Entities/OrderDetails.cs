@@ -11,6 +11,8 @@
         public string GameType { get; set; }
 
         public Game? Game { get; set; }
+        public Order Order { get; set; } // Navigation property
+
     }
 
 }

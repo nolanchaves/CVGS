@@ -1,0 +1,46 @@
+﻿@model IEnumerable<CVGS.Models.WishlistViewModel>
+
+@{
+    ViewData["Title"] = "Users and Their Wishlist Items";
+}
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h2 class="card-title">Users and Their Wishlist Items</h2>
+            <a asp-controller="Admin" asp-action="Panel" class="btn btn-danger ms-auto">Return to Panel</a>
+        </div>
+
+        <div class="card-body">
+            @foreach (var userWishlist in Model)
+            {
+                <h4>User Wishlist</h4>
+
+                @if (userWishlist.GameIdList != null && userWishlist.GameIdList.Any())
+                {
+                    <table class="table table-bordered table-striped">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Game ID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var gameId in userWishlist.GameIdList)
+                            {
+                                <tr>
+                                    <td>@gameId</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p>No wishlist items found for this user.</p>
+                }
+
+                <hr />
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,32 @@
+﻿@model List<CVGS.Models.OrderDetailViewModel>
+
+<div class="container mt-4">
+    <h2 class="mb-4">Order Details</h2>
+    @if (Model.Any())
+    {
+        <div class="row">
+            @foreach (var detail in Model)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card shadow-sm">
+                        <img class="card-img-top" src="@detail.GameImageUrl" alt="@detail.GameTitle" />
+                        <div class="card-body">
+                            <h5 class="card-title">@detail.GameTitle</h5>
+                            <p class="card-text">
+                                <strong>Price:</strong> @detail.Price.ToString("C") <br />
+                                <strong>Quantity:</strong> @detail.Quantity <br />
+                                <strong>Game Type:</strong> @detail.GameType
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            No details found for this order.
+        </div>
+    }
+</div>

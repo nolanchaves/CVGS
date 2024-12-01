@@ -44,6 +44,42 @@ public class AddressViewModel
 
     public List<string> Provinces { get; set; } = new List<string>();
 
+    public string FullAddress
+    {
+        get
+        {
+            var addressParts = new List<string>
+            {
+                StreetAddress,
+                AptSuite,
+                City,
+                Province,
+                PostalCode,
+                Country
+            };
+
+            return string.Join(", ", addressParts.Where(part => !string.IsNullOrEmpty(part)));
+        }
+    }
+
+    public string FullShippingAddress
+    {
+        get
+        {
+            var shippingAddressParts = new List<string>
+            {
+                ShippingStreetAddress,
+                ShippingAptSuite,
+                ShippingCity,
+                ShippingProvince,
+                ShippingPostalCode,
+                ShippingCountry
+            };
+
+            return string.Join(", ", shippingAddressParts.Where(part => !string.IsNullOrEmpty(part)));
+        }
+    }
+
     public AddressViewModel()
     {
         Provinces.AddRange(new List<string>

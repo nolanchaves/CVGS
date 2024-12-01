@@ -29,6 +29,7 @@
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title text-center">@game.Title</h5>
                         <p class="card-text text-center"><strong>Platform:</strong> @game.Platform</p>
+                        <p class="card-text text-center"><strong>Price:</strong> @game.Price</p>
                         <div class="mt-auto">
                             <div class="d-flex justify-content-center mt-2">
                                 <form asp-controller="Cart" asp-action="AddToCart" method="post">

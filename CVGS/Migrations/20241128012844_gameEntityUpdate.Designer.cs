@@ -4,6 +4,7 @@ using CVGS;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CVGS.Migrations
 {
     [DbContext(typeof(CvgsDbContext))]
-    partial class CvgsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241128012844_gameEntityUpdate")]
+    partial class gameEntityUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -135,246 +138,6 @@ namespace CVGS.Migrations
                     b.ToTable("CartItems");
                 });
 
-            modelBuilder.Entity("CVGS.Entities.Event", b =>
-                {
-                    b.Property<int>("EventId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EventId"));
-
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("date");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("MaxRegistrations")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("EventId");
-
-                    b.ToTable("Events");
-
-                    b.HasData(
-                        new
-                        {
-                            EventId = 1,
-                            Date = new DateOnly(2024, 12, 15),
-                            Description = "Compete in an intense battle royale tournament and win amazing prizes!",
-                            Location = "eSports Arena, Los Angeles",
-                            MaxRegistrations = 200,
-                            Name = "Battle Royale Championship"
-                        },
-                        new
-                        {
-                            EventId = 2,
-                            Date = new DateOnly(2024, 12, 20),
-                            Description = "Enjoy classic games from the 80s and 90s on original consoles.",
-                            Location = "Pixel Café, New York",
-                            MaxRegistrations = 50,
-                            Name = "Retro Gaming Night"
-                        },
-                        new
-                        {
-                            EventId = 3,
-                            Date = new DateOnly(2024, 12, 22),
-                            Description = "Discover the best indie games from up-and-coming developers.",
-                            Location = "GameDev Convention Center, San Francisco",
-                            MaxRegistrations = 100,
-                            Name = "Indie Game Showcase"
-                        },
-                        new
-                        {
-                            EventId = 4,
-                            Date = new DateOnly(2024, 12, 25),
-                            Description = "Show off your best gaming-themed cosplay and win exclusive rewards.",
-                            Location = "Anime Expo Hall, Chicago",
-                            MaxRegistrations = 75,
-                            Name = "Cosplay Contest"
-                        },
-                        new
-                        {
-                            EventId = 5,
-                            Date = new DateOnly(2025, 1, 5),
-                            Description = "Join fellow summoners for a day of friendly matches and discussions.",
-                            Location = "Riot HQ, Seattle",
-                            MaxRegistrations = 150,
-                            Name = "League of Legends Meetup"
-                        },
-                        new
-                        {
-                            EventId = 6,
-                            Date = new DateOnly(2025, 1, 10),
-                            Description = "Showcase your creativity in a timed building challenge.",
-                            Location = "Creative Zone, Houston",
-                            MaxRegistrations = 100,
-                            Name = "Minecraft Build-Off"
-                        },
-                        new
-                        {
-                            EventId = 7,
-                            Date = new DateOnly(2025, 1, 15),
-                            Description = "Immerse yourself in the latest VR games and experiences.",
-                            Location = "Virtual Arena, Boston",
-                            MaxRegistrations = 80,
-                            Name = "VR Experience Day"
-                        },
-                        new
-                        {
-                            EventId = 8,
-                            Date = new DateOnly(2025, 1, 18),
-                            Description = "Learn the art of speedrunning from professional gamers.",
-                            Location = "Streamer Studio, Denver",
-                            MaxRegistrations = 60,
-                            Name = "Speedrunning Workshop"
-                        },
-                        new
-                        {
-                            EventId = 9,
-                            Date = new DateOnly(2025, 1, 22),
-                            Description = "Team up and compete in this high-octane FPS competition.",
-                            Location = "Blizzard HQ, Irvine",
-                            MaxRegistrations = 100,
-                            Name = "Overwatch 2 Tournament"
-                        },
-                        new
-                        {
-                            EventId = 10,
-                            Date = new DateOnly(2025, 1, 28),
-                            Description = "Bring your deck and challenge other trainers to card battles.",
-                            Location = "Card Haven, Dallas",
-                            MaxRegistrations = 50,
-                            Name = "Pokemon Card Battle"
-                        },
-                        new
-                        {
-                            EventId = 11,
-                            Date = new DateOnly(2025, 2, 1),
-                            Description = "Join a thrilling one-shot campaign hosted by experienced DMs.",
-                            Location = "Adventure Guild, Portland",
-                            MaxRegistrations = 40,
-                            Name = "Dungeons & Dragons Campaign Night"
-                        },
-                        new
-                        {
-                            EventId = 12,
-                            Date = new DateOnly(2025, 2, 5),
-                            Description = "Team up with a friend and aim for Victory Royale!",
-                            Location = "Battle Grounds, Miami",
-                            MaxRegistrations = 100,
-                            Name = "Fortnite Duo Challenge"
-                        },
-                        new
-                        {
-                            EventId = 13,
-                            Date = new DateOnly(2025, 2, 10),
-                            Description = "Dive deep into the lore of Elden Ring with fellow fans.",
-                            Location = "Lore Hall, Philadelphia",
-                            MaxRegistrations = 70,
-                            Name = "Elden Ring Lore Discussion"
-                        },
-                        new
-                        {
-                            EventId = 14,
-                            Date = new DateOnly(2025, 2, 14),
-                            Description = "Compete in a 1v1 Smash Bros. Ultimate tournament.",
-                            Location = "Nintendo Center, Atlanta",
-                            MaxRegistrations = 80,
-                            Name = "Smash Bros. Ultimate Showdown"
-                        },
-                        new
-                        {
-                            EventId = 15,
-                            Date = new DateOnly(2025, 2, 18),
-                            Description = "Learn tips and tricks from professional game developers.",
-                            Location = "Tech Hub, Austin",
-                            MaxRegistrations = 100,
-                            Name = "Game Development Seminar"
-                        },
-                        new
-                        {
-                            EventId = 16,
-                            Date = new DateOnly(2025, 2, 20),
-                            Description = "Explore a variety of board games with fellow enthusiasts.",
-                            Location = "Tabletop Tavern, Detroit",
-                            MaxRegistrations = 50,
-                            Name = "Board Game Bonanza"
-                        },
-                        new
-                        {
-                            EventId = 17,
-                            Date = new DateOnly(2025, 2, 25),
-                            Description = "Show off your aerial skills in this car soccer tournament.",
-                            Location = "Arena Dome, Phoenix",
-                            MaxRegistrations = 120,
-                            Name = "Rocket League Championship"
-                        },
-                        new
-                        {
-                            EventId = 18,
-                            Date = new DateOnly(2025, 2, 28),
-                            Description = "Brace yourself for a night of spooky gaming experiences.",
-                            Location = "Haunted Hub, Orlando",
-                            MaxRegistrations = 40,
-                            Name = "Horror Game Marathon"
-                        },
-                        new
-                        {
-                            EventId = 19,
-                            Date = new DateOnly(2025, 3, 1),
-                            Description = "Show your skills in an exciting Street Fighter competition.",
-                            Location = "Arcade Central, San Diego",
-                            MaxRegistrations = 80,
-                            Name = "Street Fighter V Exhibition"
-                        },
-                        new
-                        {
-                            EventId = 20,
-                            Date = new DateOnly(2025, 3, 5),
-                            Description = "Relax and share island tips with other Animal Crossing players.",
-                            Location = "Villager Café, Charlotte",
-                            MaxRegistrations = 30,
-                            Name = "Cozy Animal Crossing Meet-Up"
-                        });
-                });
-
-            modelBuilder.Entity("CVGS.Entities.EventRegistration", b =>
-                {
-                    b.Property<int>("EventRegistrationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EventRegistrationId"));
-
-                    b.Property<int>("EventId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("RegistrationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("EventRegistrationId");
-
-                    b.HasIndex("EventId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("EventRegistrations");
-                });
-
             modelBuilder.Entity("CVGS.Entities.Game", b =>
                 {
                     b.Property<int>("GameID")
@@ -385,7 +148,8 @@ namespace CVGS.Migrations
 
                     b.Property<string>("Category")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("CoverImageURL")
                         .IsRequired()
@@ -393,18 +157,21 @@ namespace CVGS.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<long>("DownloadSize")
                         .HasColumnType("bigint");
 
                     b.Property<string>("LanguageSupport")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Platform")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -414,7 +181,8 @@ namespace CVGS.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.HasKey("GameID");
 
@@ -798,11 +566,8 @@ namespace CVGS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("TaxAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("TotalBeforeTax")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("ShippingAddressId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)");
@@ -812,6 +577,8 @@ namespace CVGS.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("OrderId");
+
+                    b.HasIndex("ShippingAddressId");
 
                     b.ToTable("Orders");
                 });
@@ -1387,8 +1154,7 @@ namespace CVGS.Migrations
 
                     b.HasOne("CVGS.Entities.User", "User")
                         .WithOne("Address")
-                        .HasForeignKey("Address", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("Address", "UserId");
 
                     b.Navigation("ShippingAddress");
 
@@ -1425,23 +1191,15 @@ namespace CVGS.Migrations
                     b.Navigation("Game");
                 });
 
-            modelBuilder.Entity("CVGS.Entities.EventRegistration", b =>
+            modelBuilder.Entity("CVGS.Entities.Order", b =>
                 {
-                    b.HasOne("CVGS.Entities.Event", "Event")
-                        .WithMany("Registrations")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CVGS.Entities.User", "User")
+                    b.HasOne("CVGS.Entities.ShippingAddress", "ShippingAddress")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("ShippingAddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Event");
-
-                    b.Navigation("User");
+                    b.Navigation("ShippingAddress");
                 });
 
             modelBuilder.Entity("CVGS.Entities.OrderDetail", b =>
@@ -1452,15 +1210,13 @@ namespace CVGS.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CVGS.Entities.Order", "Order")
+                    b.HasOne("CVGS.Entities.Order", null)
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Game");
-
-                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("CVGS.Entities.Preference", b =>
@@ -1497,8 +1253,7 @@ namespace CVGS.Migrations
                 {
                     b.HasOne("CVGS.Entities.User", "User")
                         .WithOne("ShippingAddress")
-                        .HasForeignKey("CVGS.Entities.ShippingAddress", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CVGS.Entities.ShippingAddress", "UserId");
 
                     b.Navigation("User");
                 });
@@ -1587,11 +1342,6 @@ namespace CVGS.Migrations
             modelBuilder.Entity("CVGS.Entities.Cart", b =>
                 {
                     b.Navigation("CartItems");
-                });
-
-            modelBuilder.Entity("CVGS.Entities.Event", b =>
-                {
-                    b.Navigation("Registrations");
                 });
 
             modelBuilder.Entity("CVGS.Entities.Game", b =>

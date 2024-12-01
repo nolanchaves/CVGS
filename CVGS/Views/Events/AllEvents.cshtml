@@ -1,0 +1,95 @@
+﻿@model IEnumerable<EventViewModel>
+
+@{
+    ViewData["Title"] = "Event List";
+}
+
+<div class="card mb-4 shadow-sm">
+    <div class="card-header bg-info text-white">
+        <h2 class="text-center m-0">Your Registered Events</h2>
+    </div>
+    <div class="card-body">
+        @if (Model.Any(e => e.IsUserRegistered))
+        {
+            <div class="row g-4">
+                @foreach (var eventItem in Model.Where(e => e.IsUserRegistered))
+                {
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="card-title m-0">@eventItem.Name</h5>
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-subtitle mb-3 text-muted">@eventItem.Date.ToLongDateString()</h6>
+                                <p class="card-text">
+                                    <strong>Location:</strong> @eventItem.Location
+                                </p>
+                                <p class="card-text">
+                                    <strong>Description:</strong> @eventItem.Description
+                                </p>
+                            </div>
+                            <div class="card-footer bg-light text-center">
+                                <form asp-action="Unregister" asp-controller="Events" method="post" class="d-inline">
+                                    <input type="hidden" name="eventId" value="@eventItem.EventId" />
+                                    <button type="submit" class="btn btn-danger">Unregister</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p class="text-center text-muted mb-0">You have not registered for any events yet.</p>
+            <p class="text-center text-muted">Look below for some events to register for.</p>
+        }
+    </div>
+</div>
+
+<hr />
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h2 class="text-center m-0">All Upcoming Events</h2>
+    </div>
+    <div class="card-body">
+        <div class="row g-4">
+            @foreach (var eventItem in Model)
+            {
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="card-title m-0">@eventItem.Name</h5>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-3 text-muted">@eventItem.Date.ToLongDateString()</h6>
+                            <p class="card-text">
+                                <strong>Location:</strong> @eventItem.Location
+                            </p>
+                            <p class="card-text">
+                                <strong>Description:</strong> @eventItem.Description
+                            </p>
+                        </div>
+                        <div class="card-footer bg-light text-center">
+                            @if (eventItem.IsUserRegistered)
+                            {
+                                <button class="btn btn-secondary" disabled>Registered</button>
+                            }
+                            else if (!eventItem.IsRegistrationOpen)
+                            {
+                                <button class="btn btn-danger" disabled>Registration Closed</button>
+                            }
+                            else
+                            {
+                                <form asp-action="Register" asp-controller="Events" method="post" class="d-inline">
+                                    <input type="hidden" name="eventId" value="@eventItem.EventId" />
+                                    <button type="submit" class="btn btn-success">Register</button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
