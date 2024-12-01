@@ -1,0 +1,38 @@
+﻿@model FriendsListViewModel
+@{
+    ViewData["Title"] = "Search Users";
+}
+<div class="card mt-5 mb-2">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">Search Users</h2>
+
+        <div class="container mb-4">
+            <form asp-controller="Friends" asp-action="SearchUsers" method="get" class="d-flex justify-content-center">
+                <input type="text" name="searchQuery" class="form-control w-50" placeholder="Search usernames" value="@ViewBag.UserSearchQuery" />
+                <button type="submit" class="btn btn-primary ms-2">Search</button>
+            </form>
+        </div>
+    </div>
+    <div class="card-body">
+        @if (Model!=null&&Model.Friends.Count != 0)
+        {
+            foreach (var f in Model.Friends)
+            {
+                <div class="card mb-2">
+                    <div class="card-header">
+                        <h5>@f.UserName</h5>
+                    </div>
+                    <div>
+                        <a asp-controller="Friends" asp-action="AddUser" asp-route-friendId=@f.UserId class="btn btn-outline-success">Add as friend</a>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-info" role="alert">
+                No users found.
+            </div>
+        }
+    </div>
+</div>

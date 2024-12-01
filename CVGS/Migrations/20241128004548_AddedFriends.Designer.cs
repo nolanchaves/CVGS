@@ -4,6 +4,7 @@ using CVGS;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CVGS.Migrations
 {
     [DbContext(typeof(CvgsDbContext))]
-    partial class CvgsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241128004548_AddedFriends")]
+    partial class AddedFriends
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -151,6 +154,10 @@ namespace CVGS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("FriendRequestId");
 
                     b.ToTable("FriendRequest");
@@ -160,7 +167,8 @@ namespace CVGS.Migrations
                         {
                             FriendRequestId = 1,
                             PrimaryUserId = "6c9c58e6-5b8d-42c5-8cf9-1e7c7480f5d2",
-                            SecondaryUserId = "042f95a1-3247-4e6a-a375-d2165a8bf16c"
+                            SecondaryUserId = "042f95a1-3247-4e6a-a375-d2165a8bf16c",
+                            Status = "Pending"
                         });
                 });
 

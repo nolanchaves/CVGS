@@ -33,5 +33,9 @@ namespace CVGS.Entities
         public IEnumerable<Review>? Review { get; set; }
 
         public IEnumerable<Wishlist>? Wishlist { get; set; }
+        //[ForeignKey("FriendRequestId")]
+        //public IEnumerable<FriendRequest>? FriendRequests { get; set; }
+        //[ForeignKey("FriendsId")]
+        //public IEnumerable<Friends>? Friends { get; set; }
     }
 }

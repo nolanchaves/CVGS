@@ -229,6 +229,36 @@ namespace CVGS
                     }
                 );
             });
+
+            builder.Entity<Friends>(b =>
+            {
+                b.HasMany(f => f.UserOne)
+                .WithMany();
+
+                b.HasMany(f => f.UserTwo)
+                .WithMany();
+
+                b.HasData(
+                    new Friends {FriendId=3, UserOneId = "042f95a1-3247-4e6a-a375-d2165a8bf16c", UserTwoId = "05e61254-11dc-44d9-89e7-0e574ce7099a" },
+                    new Friends { FriendId = 1, UserOneId = "042f95a1-3247-4e6a-a375-d2165a8bf16c", UserTwoId = "e091dbd6-3f3f-4177-87f1-c8a7b2674a9f" },
+                    new Friends { FriendId = 2, UserOneId = "042f95a1-3247-4e6a-a375-d2165a8bf16c", UserTwoId = "88193658-5295-478b-9f7e-534f739a06bc" }
+                    );
+            });
+
+            builder.Entity<FriendRequest>(b =>
+            {
+                b.HasMany(f => f.PrimaryUser)
+                .WithMany();
+                
+                b.HasMany(f => f.SecondaryUser)
+                .WithMany();
+
+                b.HasData(
+                    new FriendRequest {FriendRequestId=1, 
+                        PrimaryUserId = "6c9c58e6-5b8d-42c5-8cf9-1e7c7480f5d2", 
+                        SecondaryUserId = "042f95a1-3247-4e6a-a375-d2165a8bf16c" }
+                );
+            });
         }
 
         public DbSet<Preference> Preferences { get; set; }
@@ -241,5 +271,7 @@ namespace CVGS
         public DbSet<Wishlist> Wishlist { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<FriendRequest> FriendRequest {  get; set; }
+        public DbSet<Friends> Friends {  get; set; }
     }
 }
