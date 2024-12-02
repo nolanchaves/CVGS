@@ -3,7 +3,9 @@ using CVGS.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
+using NuGet.ContentModel;
 
 namespace CVGS.Controllers
 {
@@ -81,7 +83,5 @@ namespace CVGS.Controllers
 
             return RedirectToAction("AllEvents");
         }
-
     }
-
 }

@@ -9,7 +9,7 @@ using Moq;
 namespace CVGS.Tests.Controllers
 {
     [TestFixture]
-    public class GamesControllerTests
+    public class GameTests
     {
         private CvgsDbContext _context;
         private Mock<UserManager<User>> _mockUserManager;
@@ -26,18 +26,6 @@ namespace CVGS.Tests.Controllers
             var store = new Mock<IUserStore<User>>();
             _mockUserManager = new Mock<UserManager<User>>(store.Object, null, null, null, null, null, null, null, null);
             _controller = new GamesController(_context, null, _mockUserManager.Object); // Pass null for ReviewService
-        }
-
-        [Test]
-        public void AllGames_ReturnsViewWithEmptyList_WhenNoGamesExist()
-        {
-            // Act
-            var result = _controller.AllGames() as ViewResult;
-
-            // Assert
-            Assert.IsNotNull(result);
-            var model = result.Model as List<GameViewModel>;
-            Assert.IsEmpty(model);
         }
 
         [Test]

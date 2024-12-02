@@ -24,7 +24,12 @@ namespace CVGS.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly EmailService _emailService;
-
+        private CvgsDbContext dbContext;
+        private ILogger<AccountController> object1;
+        private UserManager<User> object2;
+        private SignInManager<User> signInManager;
+        private RoleManager<IdentityRole> object3;
+        private IEmailService object4;
 
         public AccountController(CvgsDbContext context, ILogger<AccountController> logger, UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, EmailService emailService)
         {
@@ -35,6 +40,7 @@ namespace CVGS.Controllers
             _roleManager = roleManager;
             _emailService = emailService;
         }
+
 
         [HttpGet]
         public IActionResult SignUp()
@@ -386,6 +392,7 @@ namespace CVGS.Controllers
             }
 
             var user = await _userManager.GetUserAsync(User);
+
             if (user != null)
             {
                 var existingPreferences = await _context.Preferences

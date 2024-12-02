@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace CVGS.Tests.Controllers
 {
     [TestFixture]
-public class ReviewControllerTests
+public class ReviewTests
     {
         private CvgsDbContext _context;
         private Mock<UserManager<User>> _mockUserManager;
@@ -34,8 +34,6 @@ public class ReviewControllerTests
             _mockUserManager = new Mock<UserManager<User>>(store.Object, null, null, null, null, null, null, null, null);
             _controller = new ReviewController(_context, _mockUserManager.Object);
         }
-
-
 
         [Test]
         public void AddReview_Get_UnauthorizedUser_RedirectsToLogin()
@@ -55,8 +53,6 @@ public class ReviewControllerTests
             Assert.IsInstanceOf<RedirectToActionResult>(result);
             Assert.AreEqual("Login", (result as RedirectToActionResult).ActionName);
         }
-
-
 
         [Test]
         public async Task AddReview_Post_NonExistentGame_ReturnsNotFound()
