@@ -60,6 +60,38 @@ namespace CVGS.Controllers
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
+        
+        [HttpGet]
+        public IActionResult ViewFriendWishlist(string id)
+        {
+            try
+            {
+                List<Wishlist> wishlist = _context.Wishlist.Where(r => r.UserId == id).ToList();
+                List<GameViewModel> games = new List<GameViewModel>();
+
+                foreach (Wishlist w in wishlist)
+                {
+                    var game = _context.Games
+                        .Select(g => new GameViewModel()
+                        {
+                            GameID = g.GameID,
+                            Title = g.Title,
+                            Platform = g.Platform,
+                            Price = g.Price,
+                            CoverImageURL = g.CoverImageURL,
+                        })
+                        .Where(g=>g.GameID == w.GameId)
+                        .FirstOrDefault();   
+                    
+                    if(game!=null)games.Add(game);
+                }
+
+                return View("FriendsWishlist",games);
+            }
+            catch (Exception ex) {
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
 
         public IActionResult RemoveWishlist(int id)
         {
@@ -97,6 +129,7 @@ namespace CVGS.Controllers
 
                 var exists = await _context.Wishlist.FirstOrDefaultAsync(r => r.UserId == _userId && r.GameId == id);
 
+                var gameTitle = _context.Games.FirstOrDefault(g => g.GameID == id).Title;
                 if (exists == null)
                 {
                     exists = new Wishlist();
@@ -106,15 +139,15 @@ namespace CVGS.Controllers
                     exists.GameId = id;
 
                     await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = $"{gameTitle} has been added to your Wishlist.";
                     Debug.WriteLine("Wishlist: added");
                 }
                 else
                 {
+                    TempData["SuccessMessage"] = $"{gameTitle} is already in your Wishlist.";
                     Debug.WriteLine("Wishlist exists");
                 }
-                var game = _context.Games.FirstOrDefault(g => g.GameID == exists.GameId);
-                TempData["SuccessMessage"] = $"{game.Title} has been added to your Wishlist.";
-                return RedirectToAction("AllGames", "Games");
+                return RedirectToAction("ViewAllWishlist");
 
             }
             catch (Exception ex)

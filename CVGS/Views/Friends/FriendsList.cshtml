@@ -1,6 +1,120 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model FriendsListViewModel
 @{
+    ViewData["Title"] = "Search Users";
 }
-<p>Friends</p>
+<div class="card mt-5 mb-2">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">Search</h2>
+        <div class="container mb-4">
+            <form asp-controller="Friends" asp-action="FriendsList" method="get" class="d-flex justify-content-center">
+                <input type="text" name="searchQuery" class="form-control w-50" placeholder="Search usernames" value="@ViewBag.UserSearchQuery" />
+                <button type="submit" class="btn btn-primary ms-2">Search</button>
+            </form>
+        </div>
+    </div>
+    <div class="card-body">
+        @if (Model.Strangers.Count != 0)
+        {
+            foreach (var f in Model.Strangers)
+            {
+                <div class="card mb-2">
+                    <div class="card-header">
+                        <h5>@f.UserName</h5>
+                    </div>
+                    <div>
+                        <a asp-controller="Friends" asp-action="AddRequest" asp-route-userId=@f.UserId class="btn btn-outline-success">Add as friend</a>
+                    </div>
+                </div>
+            }
+        }
+        else if(ViewBag.UserSearchQuery!=null)
+        {
+            <div class="alert alert-info" role="alert">
+                No user found that's not in the lists below.
+            </div>
+        }
+    </div>
+</div>
+<div class="card mt-5 mb-2">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">Friends List</h2>
+    </div>
+    <div class="card-body">
+        @if (Model.Friends.Count != 0)
+        {
+            foreach (var f in Model.Friends)
+            {
+                <div class="card mb-2">
+                    <div class="card-header">
+                        <h5>@f.UserName</h5>
+                    </div>
+                    <div>
+                        <a asp-controller="Wishlist" asp-action="ViewFriendWishlist" asp-route-id=@f.UserId class="btn">See Wishlist</a>
+                        <a asp-controller="Friends" asp-action="RemoveFriend" asp-route-friendId=@f.Id class="btn btn-danger">Remove Friend</a>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-info" role="alert">
+                No friends.
+            </div>
+        }
+    </div>
+</div>
+<div class="card mt-5 mb-2">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">Incoming Friend Requests</h2>
+    </div>
+    <div class="card-body">
+        @if (Model.PendingIn.Count != 0)
+        {
+            foreach (var f in Model.PendingIn)
+            {
+                <div class="card mb-2">
+                    <div class="card-header">
+                        <h5>@f.UserName</h5>
+                    </div>
+                    <div>
+                        <a asp-controller="Friends" asp-action="AddFriend" asp-route-userId=@f.UserId asp-route-reqId=@f.Id class="btn btn-outline-success">Accept Request</a>
+                        <a asp-controller="Friends" asp-action="RemoveRequest" asp-route-reqId=@f.Id class="btn btn-danger">Remove</a>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-info" role="alert">
+                No incoming requests.
+            </div>
+        }
+    </div>
+</div>
+<div class="card mt-5 mb-2">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">Outcoming Friend Requests</h2>
+    </div>
+    <div class="card-body">
+        @if (Model.PendingOut.Count != 0)
+        {
+            foreach (var f in Model.PendingOut)
+            {
+                <div class="card mb-2">
+                    <div class="card-header">
+                        <h5>@f.UserName</h5>
+                    </div>
+                    <div>
+                        <a asp-controller="Friends" asp-action="RemoveRequest" asp-route-reqId=@f.Id class="btn btn-danger">Cancel</a>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-info" role="alert">
+                No sent request.
+            </div>
+        }
+    </div>
+</div>

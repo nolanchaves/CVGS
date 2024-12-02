@@ -30,7 +30,10 @@ namespace CVGS.Controllers
                     OrderId = o.OrderId,
                     OrderDate = o.OrderDate,
                     TotalPrice = o.TotalPrice,
-                    PaymentMethod = o.PaymentMethod
+                    PaymentMethod = o.PaymentMethod,
+                    GameType = _context.OrderDetails.First(d=>d.OrderId==o.OrderId).GameType,
+                    GameTitle = _context.Games.First(
+                        g=>g.GameID==_context.OrderDetails.First(d => d.OrderId == o.OrderId).GameId).Title
                 })
                 .ToList();
 
@@ -58,6 +61,28 @@ namespace CVGS.Controllers
             }
 
             return View(orderDetails);
+        }
+
+        public IActionResult DownloadOrder(int orderId)
+        {
+            var orderDetails = _context.OrderDetails.First(o=>o.OrderId==orderId);
+
+            if(orderDetails.GameType.Equals("Physical")) return RedirectToAction("OrderList");
+
+            string gameContent = _context.Games.First(g=>g.GameID==orderDetails.GameId).Title;
+
+            MemoryStream stream = new MemoryStream();
+            StreamWriter writer = new StreamWriter(stream);
+            writer.Write(gameContent);
+            writer.Flush();
+            stream.Position = 0;
+
+
+            if (stream!=null)
+            {
+                return File(stream, "application/octet-stream",gameContent+".txt");
+            }
+            return RedirectToAction("OrderList");
         }
     }
 }

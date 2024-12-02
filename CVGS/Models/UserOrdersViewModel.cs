@@ -6,5 +6,7 @@
         public DateTime OrderDate { get; set; }
         public decimal TotalPrice { get; set; }
         public string PaymentMethod { get; set; }
+        public string GameType {  get; set; }
+        public string GameTitle {  get; set; }
     }
 }

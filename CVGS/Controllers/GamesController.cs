@@ -4,6 +4,7 @@ using CVGS.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CVGS.Controllers
 {
@@ -43,6 +44,38 @@ namespace CVGS.Controllers
             ViewBag.SearchQuery = searchQuery;
 
             return View(games);
+        }
+        
+        public IActionResult RecommendedGames()
+        {
+            if (!User.Identity.IsAuthenticated) return RedirectToAction("AllGames");
+            var _userId = _userManager.GetUserId(User);
+
+            var userPref = _context.Users.Include(u=>u.Preferences).FirstOrDefault(u=>u.Id==_userId).Preferences;
+
+            var games = _context.Games
+                .Where(g=>
+                    (userPref.LanguagePreferences.Any(p=>g.LanguageSupport.Contains(p))||
+                    userPref.FavouritePlatforms.Any(p=>g.Platform.Contains(p)))&&
+                    (userPref.FavouriteGameCategories.Any(p=>g.Category.Contains(p)))
+                )
+                .Select(g => new GameViewModel
+                {
+                    GameID = g.GameID,
+                    Title = g.Title,
+                    Platform = g.Platform,
+                    Price = g.Price,
+                    CoverImageURL = g.CoverImageURL
+                })
+                .ToList();
+
+            //if (games.IsNullOrEmpty())
+            //{
+            //    return RedirectToAction("AllGames");
+            //}
+            ViewBag.GameListMode = "Recommended Games";
+
+            return View("AllGames",games);
         }
 
         public IActionResult GameDetails(int id)
