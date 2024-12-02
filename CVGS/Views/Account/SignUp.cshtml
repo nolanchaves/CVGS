@@ -4,56 +4,60 @@
     ViewData["Title"] = "Sign Up";
 }
 
-<div class="container">
-    <h2>Sign Up</h2>
-
-    @if (!ViewData.ModelState.IsValid)
-    {
-        <div class="alert alert-danger">
-            <strong>There were some errors with your sign up:</strong>
-            <ul>
-                @foreach (var entry in ViewData.ModelState)
-                {
-                    foreach (var error in entry.Value.Errors)
-                    {
-                        <li>@error.ErrorMessage</li>
-                    }
-                }
-            </ul>
+<div class="container mt-5">
+    <div class="card mx-auto" style="max-width: 600px;">
+        <div class="card-header text-center">
+            <h2 class="mb-0">Sign Up</h2>
         </div>
-    }
+        <div class="card-body">
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger mb-4">
+                    <strong>There were some errors with your sign up:</strong>
+                    <ul>
+                        @foreach (var entry in ViewData.ModelState)
+                        {
+                            foreach (var error in entry.Value.Errors)
+                            {
+                                <li>@error.ErrorMessage</li>
+                            }
+                        }
+                    </ul>
+                </div>
+            }
 
-    <form asp-action="SignUp" method="post">
-        <div class="form-group">
-            <label asp-for="DisplayName"></label>
-            <input asp-for="DisplayName" class="form-control" />
+            <form asp-action="SignUp" method="post">
+                <div class="form-group mb-4">
+                    <label asp-for="DisplayName"></label>
+                    <input asp-for="DisplayName" class="form-control" placeholder="Enter your display name" />
+                </div>
+                <div class="form-group mb-4">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" class="form-control" placeholder="Enter your email" />
+                </div>
+                <div class="form-group mb-4">
+                    <label asp-for="Password"></label>
+                    <input asp-for="Password" class="form-control" type="password" placeholder="Enter your password" />
+                </div>
+                <div class="form-group mb-4">
+                    <label asp-for="ConfirmPassword"></label>
+                    <input asp-for="ConfirmPassword" class="form-control" type="password" placeholder="Confirm your password" />
+                </div>
+
+                <!-- reCAPTCHA -->
+                <div class="mt-4 mb-4">
+                    <div class="g-recaptcha" data-sitekey="6LeotlsqAAAAADOV94OuX4lOkuTj2PD0cfx7F-80"></div>
+                </div>
+
+                <div class="mt-4 mb-4 d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">Sign Up</button>
+                    <a asp-controller="Account" asp-action="Login" class="btn btn-success">Login</a>
+                </div>
+            </form>
         </div>
-        <div class="form-group">
-            <label asp-for="Email"></label>
-            <input asp-for="Email" class="form-control" />
-        </div>
-        <div class="form-group">
-            <label asp-for="Password"></label>
-            <input asp-for="Password" class="form-control" type="password" />
-        </div>
-        <div class="form-group">
-            <label asp-for="ConfirmPassword"></label>
-            <input asp-for="ConfirmPassword" class="form-control" type="password" />
-        </div>
-
-        <br />
-
-        <div class="g-recaptcha" data-sitekey="6LeotlsqAAAAADOV94OuX4lOkuTj2PD0cfx7F-80"></div>
-
-
-        <div class="mt-3">
-            <button type="submit" class="btn btn-primary">Sign Up</button>
-            <a asp-controller="Account" asp-action="Login" class="btn btn-success">Login</a>
-        </div>
-    </form>
-
-    @section Scripts {
-        <script src='https://www.google.com/recaptcha/api.js'></script>
-    }
+    </div>
 </div>
 
+@section Scripts {
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+}

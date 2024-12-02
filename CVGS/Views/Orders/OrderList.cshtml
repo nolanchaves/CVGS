@@ -1,5 +1,9 @@
 ﻿@model List<CVGS.Models.UserOrdersViewModel>
 
+@{
+    ViewData["Title"] = "All Orders";
+}
+
 <div class="container mt-4">
     <h2 class="mb-4">Your Orders</h2>
     @if (Model.Any())
